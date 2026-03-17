@@ -1,7 +1,5 @@
 "use client";
-
 import { useState, useEffect, useRef, useCallback } from "react";
-
 const COLORS = {
   sage: "#5B8A6E",
   sageLight: "#E8F2EC",
