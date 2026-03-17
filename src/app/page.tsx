@@ -441,7 +441,7 @@ Respond ONLY with valid JSON in exactly this format, no markdown, no preamble:
 
                   {/* Controls */}
                   <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
-                    {!timerRef.current?._idleTimeout && sessionTimer === 0 ? (
+                    {sessionTimer === 0 ? (
                       <button onClick={() => setSessionActive({ ...sessionActive, running: true })} style={{ background: COLORS.sage, color: "#fff", border: "none", padding: "10px 24px", borderRadius: 25, cursor: "pointer", fontSize: 14, fontFamily: "Georgia, serif" }}>
                         Begin Session
                       </button>
