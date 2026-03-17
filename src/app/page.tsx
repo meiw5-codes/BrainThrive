@@ -134,8 +134,8 @@ export default function BrainThrive() {
   const [playlistLoading, setPlaylistLoading] = useState(false);
   const [playlistError, setPlaylistError] = useState("");
   const [showPlaylistBuilder, setShowPlaylistBuilder] = useState(false);
-  const timerRef = useRef(null);
-  const poseRef = useRef(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const poseRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const poseFeedback = [
     "Your arms could be a little higher — try lifting them to shoulder height",
