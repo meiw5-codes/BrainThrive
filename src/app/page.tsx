@@ -119,7 +119,7 @@ function Card({ children, style={}, onClick=undefined }) {
   );
 }
 
-function Btn({ children, onClick, variant="primary", size="md", style={} }) {
+function Btn({ children, onClick=undefined, variant="primary", size="md", style={} }) {
   const [hov, setHov] = useState(false);
   const sz = size==="lg" ? {padding:"14px 32px",fontSize:17} : size==="sm" ? {padding:"7px 16px",fontSize:13} : {padding:"10px 22px",fontSize:15};
   const vars = {
