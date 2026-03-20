@@ -111,7 +111,7 @@ function Avatar({ letter, size=44, bg=C.sageLight, color=C.sage }) {
   );
 }
 
-function Card({ children, style={}, onClick }) {
+function Card({ children, style={}, onClick=undefined }) {
   const [hov, setHov] = useState(false);
   return (
     <div onClick={onClick} onMouseEnter={()=>onClick&&setHov(true)} onMouseLeave={()=>setHov(false)}
