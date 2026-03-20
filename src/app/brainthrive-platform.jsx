@@ -22,6 +22,8 @@ const C = {
   inkLight:     "#8A8A9A",
   border:       "rgba(0,0,0,0.07)",
   borderMid:    "rgba(0,0,0,0.12)",
+  navy:         "#1E3A5F",
+  sageMid:      "#9DC0AC",
 };
 
 const pillarColor = { Move: C.sage,      Calm: C.teal,      Think: C.lavender };
@@ -30,8 +32,8 @@ const pillarIcon  = { Move: "🌿",         Calm: "🌊",         Think: "🧠" 
 
 // ─── Data ─────────────────────────────────────────────────────────
 const sessions = [
-  { id:1,  title:"Morning Baduanjin Flow",         pillar:"Move",  duration:15, level:"Gentle",     completed:true,  videoUrl:"" },
-  { id:2,  title:"Eight Brocades — Introduction",  pillar:"Move",  duration:12, level:"Gentle",     completed:true,  videoUrl:"" },
+  { id:1,  title:"Morning Baduanjin Flow",         pillar:"Move",  duration:15, level:"Gentle",     completed:false, videoUrl:"https://vimeo.com/1175566185" },
+  { id:2,  title:"Eight Brocades — Introduction",  pillar:"Move",  duration:12, level:"Gentle",     completed:false, videoUrl:"" },
   { id:3,  title:"Standing Posture & Root",         pillar:"Move",  duration:10, level:"Gentle",     completed:false, videoUrl:"" },
   { id:4,  title:"Chair-Assisted Baduanjin",        pillar:"Move",  duration:15, level:"Gentle",     completed:false, videoUrl:"" },
   { id:5,  title:"PMR Evening Wind-Down",           pillar:"Move",  duration:15, level:"Gentle",     completed:false, videoUrl:"" },
@@ -43,8 +45,8 @@ const sessions = [
   { id:11, title:"Spinal Mobility Sequence",        pillar:"Move",  duration:15, level:"Moderate",   completed:false, videoUrl:"" },
   { id:12, title:"Baduanjin Master Flow",           pillar:"Move",  duration:30, level:"Energising", completed:false, videoUrl:"" },
   { id:13, title:"Dynamic Balance Challenge",       pillar:"Move",  duration:25, level:"Energising", completed:false, videoUrl:"" },
-  { id:14, title:"Acupressure Calm Reset",          pillar:"Calm",  duration:10, level:"Gentle",     completed:true,  videoUrl:"" },
-  { id:15, title:"Hand Meridian Sequence",          pillar:"Calm",  duration:8,  level:"Gentle",     completed:false, videoUrl:"" },
+  { id:14, title:"Auricular & Body Relaxation for Sleep", pillar:"Calm", duration:30, level:"Gentle", completed:false, videoUrl:"https://vimeo.com/1175246296" },
+  { id:15, title:"Auricular & Body Relaxation — 5 min",   pillar:"Calm", duration:5,  level:"Gentle", completed:false, videoUrl:"https://vimeo.com/1175244443" },
   { id:16, title:"Ear Acupressure for Sleep",       pillar:"Calm",  duration:8,  level:"Gentle",     completed:false, videoUrl:"" },
   { id:17, title:"4-7-8 Breathing Reset",           pillar:"Calm",  duration:8,  level:"Gentle",     completed:false, videoUrl:"" },
   { id:18, title:"Foot Reflexology Basics",         pillar:"Calm",  duration:10, level:"Gentle",     completed:false, videoUrl:"" },
@@ -138,8 +140,293 @@ function Btn({ children, onClick, variant="primary", size="md", style={} }) {
   );
 }
 
-// ─── App ──────────────────────────────────────────────────────────
-export default function BrainThrive() {
+// ─── Auth & Paywall screens ───────────────────────────────────────
+
+function AuthScreen({ onAuth }) {
+  const [mode, setMode]         = useState("signup"); // "signup" | "login"
+  const [name, setName]         = useState("");
+  const [email, setEmail]       = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError]       = useState("");
+  const [loading, setLoading]   = useState(false);
+
+  async function handleSubmit() {
+    if (!email || !password || (mode==="signup" && !name)) {
+      setError("Please fill in all fields."); return;
+    }
+    setLoading(true); setError("");
+    // In production: call Supabase auth here
+    // For beta: simulate signup — store in localStorage
+    await new Promise(r => setTimeout(r, 900));
+    const user = { name: name||email.split("@")[0], email, plan: "free", sessionsWatched: [] };
+    localStorage.setItem("bt_user", JSON.stringify(user));
+    onAuth(user);
+    setLoading(false);
+  }
+
+  return (
+    <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+      <div style={{ width:"100%", maxWidth:440 }}>
+        {/* Logo */}
+        <div style={{ textAlign:"center", marginBottom:40 }}>
+          <div style={{ width:56, height:56, borderRadius:18, background:C.sage, display:"flex", alignItems:"center", justifyContent:"center", margin:"0 auto 12px" }}>
+            <span style={{ color:"#fff", fontFamily:"Georgia,serif", fontWeight:600, fontSize:26 }}>B</span>
+          </div>
+          <div style={{ fontFamily:"Georgia,serif", fontSize:26, fontWeight:600, color:C.ink }}>BrainThrive</div>
+          <div style={{ fontSize:14, color:C.inkLight, marginTop:4 }}>Move · Calm · Think</div>
+        </div>
+
+        <div style={{ background:"#fff", borderRadius:24, padding:36, boxShadow:"0 4px 24px rgba(0,0,0,0.08)" }}>
+          {/* Toggle */}
+          <div style={{ display:"flex", background:C.bgDeep, borderRadius:14, padding:4, marginBottom:28 }}>
+            {["signup","login"].map(m=>(
+              <button key={m} onClick={()=>{setMode(m);setError("");}}
+                style={{ flex:1, padding:"10px 0", borderRadius:11, border:"none", background:mode===m?"#fff":"transparent", color:mode===m?C.ink:C.inkMid, fontWeight:mode===m?600:400, fontSize:15, cursor:"pointer", fontFamily:"'Inter',sans-serif", transition:"all 0.15s" }}>
+                {m==="signup" ? "Create account" : "Sign in"}
+              </button>
+            ))}
+          </div>
+
+          {mode==="signup" && (
+            <div style={{ marginBottom:16 }}>
+              <label style={{ fontSize:14, color:C.inkMid, display:"block", marginBottom:6 }}>Your name</label>
+              <input type="text" value={name} onChange={e=>setName(e.target.value)} placeholder="e.g. Eleanor" style={{ fontFamily:"'Inter',sans-serif", fontSize:16, border:`1.5px solid ${C.borderMid}`, borderRadius:12, padding:"12px 16px", width:"100%", outline:"none", boxSizing:"border-box" }}/>
+            </div>
+          )}
+          <div style={{ marginBottom:16 }}>
+            <label style={{ fontSize:14, color:C.inkMid, display:"block", marginBottom:6 }}>Email address</label>
+            <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="your@email.com" style={{ fontFamily:"'Inter',sans-serif", fontSize:16, border:`1.5px solid ${C.borderMid}`, borderRadius:12, padding:"12px 16px", width:"100%", outline:"none", boxSizing:"border-box" }}/>
+          </div>
+          <div style={{ marginBottom:20 }}>
+            <label style={{ fontSize:14, color:C.inkMid, display:"block", marginBottom:6 }}>Password</label>
+            <input type="password" value={password} onChange={e=>setPassword(e.target.value)} placeholder="At least 8 characters" style={{ fontFamily:"'Inter',sans-serif", fontSize:16, border:`1.5px solid ${C.borderMid}`, borderRadius:12, padding:"12px 16px", width:"100%", outline:"none", boxSizing:"border-box" }}/>
+          </div>
+
+          {error && <div style={{ color:C.amber, fontSize:14, marginBottom:14 }}>{error}</div>}
+
+          <button onClick={handleSubmit} disabled={loading}
+            style={{ width:"100%", padding:"14px 0", background:loading?C.sageMid:C.sage, color:"#fff", border:"none", borderRadius:14, fontSize:17, fontWeight:600, cursor:loading?"not-allowed":"pointer", fontFamily:"Georgia,serif", marginBottom:16, transition:"background 0.2s" }}>
+            {loading ? "Just a moment..." : mode==="signup" ? "Start for free →" : "Sign in →"}
+          </button>
+
+          {mode==="signup" && (
+            <div style={{ fontSize:13, color:C.inkLight, textAlign:"center", lineHeight:1.6 }}>
+              Free account includes <strong style={{ color:C.ink }}>1 session video</strong> to try.<br/>
+              Unlock all 36 sessions from $14.99/month.
+            </div>
+          )}
+        </div>
+
+        <div style={{ textAlign:"center", marginTop:20, fontSize:13, color:C.inkLight }}>
+          By signing up you agree to our Terms of Service and Privacy Policy
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PaywallScreen({ onSubscribe, onBack, sessionTitle, user }) {
+  const [selected, setSelected] = useState("monthly");
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState("");
+
+  const plans = [
+    {
+      id:      "monthly",
+      label:   "Monthly",
+      price:   "$14.99",
+      period:  "/month",
+      note:    "Cancel any time · 7-day free trial",
+      priceId: process.env.NEXT_PUBLIC_STRIPE_MONTHLY_PRICE_ID || "",
+      badge:   null,
+    },
+    {
+      id:      "annual",
+      label:   "Annual",
+      price:   "$125",
+      period:  "/year",
+      note:    "Save 30% · Best value · 7-day free trial",
+      priceId: process.env.NEXT_PUBLIC_STRIPE_ANNUAL_PRICE_ID || "",
+      badge:   "POPULAR",
+    },
+  ];
+
+  async function handleSubscribe() {
+    setLoading(true); setError("");
+    const plan = plans.find(p => p.id === selected);
+
+    try {
+      // Call our Stripe checkout API route
+      const res = await fetch("/api/checkout", {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({
+          priceId: plan.priceId,
+          email:   user?.email || "",
+          name:    user?.name  || "",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.url) {
+        // Redirect to Stripe hosted checkout page
+        window.location.href = data.url;
+      } else if (data.error) {
+        // Stripe not configured yet — simulate upgrade for beta testing
+        if (data.error.includes("price") || data.error.includes("key") || !plan.priceId) {
+          const updated = { ...user, plan: "pro" };
+          localStorage.setItem("bt_user", JSON.stringify(updated));
+          onSubscribe();
+        } else {
+          setError("Payment setup issue — please try again or contact support.");
+        }
+      }
+    } catch {
+      // Network error or Stripe not set up yet — simulate for beta
+      const updated = { ...user, plan: "pro" };
+      localStorage.setItem("bt_user", JSON.stringify(updated));
+      onSubscribe();
+    }
+    setLoading(false);
+  }
+
+  return (
+    <div style={{ minHeight:"100vh", background:C.bg, display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+      <div style={{ width:"100%", maxWidth:480 }}>
+        <button onClick={onBack} style={{ background:"none", border:"none", color:C.sage, fontSize:15, cursor:"pointer", marginBottom:20, fontFamily:"'Inter',sans-serif" }}>← Back</button>
+
+        <div style={{ textAlign:"center", marginBottom:32 }}>
+          <div style={{ fontSize:52, marginBottom:12 }}>🔒</div>
+          <h2 style={{ fontFamily:"Georgia,serif", fontSize:26, fontWeight:600, color:C.ink, margin:"0 0 8px" }}>Unlock "{sessionTitle}"</h2>
+          <p style={{ fontSize:16, color:C.inkMid, lineHeight:1.6, margin:0 }}>You've watched your free session. Subscribe to unlock all 36 sessions, AI coaching, and Sage's personalised playlists.</p>
+        </div>
+
+        {/* 7-day trial callout */}
+        <div style={{ background:C.sageLight, borderRadius:14, padding:"12px 18px", marginBottom:20, display:"flex", alignItems:"center", gap:12 }}>
+          <span style={{ fontSize:22 }}>🎁</span>
+          <div>
+            <div style={{ fontWeight:600, fontSize:14, color:C.sageDark }}>7-day free trial included</div>
+            <div style={{ fontSize:13, color:C.inkMid }}>Try everything free — no charge until day 8. Cancel any time.</div>
+          </div>
+        </div>
+
+        {/* Plan cards */}
+        <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:24 }}>
+          {plans.map(plan => (
+            <div key={plan.id} onClick={() => setSelected(plan.id)}
+              style={{ background:"#fff", borderRadius:18, padding:"20px 22px", border:`2px solid ${selected===plan.id ? C.sage : C.border}`, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"space-between", transition:"border 0.15s" }}>
+              <div style={{ display:"flex", alignItems:"center", gap:14 }}>
+                <div style={{ width:22, height:22, borderRadius:"50%", border:`2px solid ${selected===plan.id ? C.sage : C.borderMid}`, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  {selected===plan.id && <div style={{ width:12, height:12, borderRadius:"50%", background:C.sage }}/>}
+                </div>
+                <div>
+                  <div style={{ fontWeight:600, fontSize:16, color:C.ink }}>{plan.label}</div>
+                  <div style={{ fontSize:13, color:C.inkLight }}>{plan.note}</div>
+                </div>
+              </div>
+              <div style={{ textAlign:"right" }}>
+                {plan.badge && <div style={{ background:C.sage, color:"#fff", fontSize:10, fontWeight:700, padding:"2px 8px", borderRadius:8, marginBottom:4, textAlign:"center" }}>{plan.badge}</div>}
+                <div style={{ fontFamily:"Georgia,serif", fontSize:22, fontWeight:600, color:C.ink }}>
+                  {plan.price}<span style={{ fontSize:13, color:C.inkLight, fontWeight:400 }}>{plan.period}</span>
+                </div>
+                {plan.id === "annual" && <div style={{ fontSize:11, color:C.sage, fontWeight:600 }}>≈ $10.42/month</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* What's included */}
+        <div style={{ background:C.sageLight, borderRadius:16, padding:20, marginBottom:24 }}>
+          <div style={{ fontWeight:600, fontSize:15, color:C.sageDark, marginBottom:12 }}>Everything included:</div>
+          {[
+            "All 36 sessions — Move, Calm & Think",
+            "AI coaching with live pose feedback",
+            "Sage AI personalised playlists",
+            "Daily health log & progress tracking",
+            "Community Wisdom Wall",
+            "New sessions added every month",
+          ].map(f => (
+            <div key={f} style={{ display:"flex", alignItems:"center", gap:10, marginBottom:8, fontSize:14, color:C.inkMid }}>
+              <span style={{ color:C.sage, fontWeight:700, flexShrink:0 }}>✓</span> {f}
+            </div>
+          ))}
+        </div>
+
+        {error && <div style={{ color:C.amber, fontSize:14, marginBottom:14, textAlign:"center" }}>{error}</div>}
+
+        <button onClick={handleSubscribe} disabled={loading}
+          style={{ width:"100%", padding:"16px 0", background:loading ? C.sageMid : C.sage, color:"#fff", border:"none", borderRadius:14, fontSize:18, fontWeight:600, cursor:loading ? "not-allowed" : "pointer", fontFamily:"Georgia,serif", marginBottom:12, transition:"background 0.2s" }}>
+          {loading ? "Redirecting to payment..." : `Start free trial →`}
+        </button>
+
+        <div style={{ textAlign:"center", fontSize:13, color:C.inkLight, lineHeight:1.6 }}>
+          Secure payment via Stripe · Cancel any time · No hidden fees<br/>
+          You won't be charged for 7 days
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Free session gate ────────────────────────────────────────────
+// Session IDs that are free for all users (first video per pillar)
+const FREE_SESSION_IDS = new Set([1, 14, 26]);
+
+function isSessionLocked(sessionId, user) {
+  if (!user) return true;
+  if (user.plan === "pro") return false;
+  return !FREE_SESSION_IDS.has(sessionId);
+}
+
+export default function BrainThriveApp() {
+  const [user, setUser]           = useState(null);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [paywallSession, setPaywallSession] = useState(null);
+
+  // Check for existing session on load
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("bt_user");
+      if (stored) setUser(JSON.parse(stored));
+    } catch {}
+    setAuthChecked(true);
+  }, []);
+
+  function handleAuth(newUser) { setUser(newUser); }
+  function handleSignOut() { localStorage.removeItem("bt_user"); setUser(null); }
+  function handleSubscribe() {
+    const updated = { ...user, plan:"pro" };
+    setUser(updated);
+    localStorage.setItem("bt_user", JSON.stringify(updated));
+    setShowPaywall(false);
+  }
+  function handleSessionClick(session, openSession) {
+    if (isSessionLocked(session.id, user)) {
+      setPaywallSession(session);
+      setShowPaywall(true);
+    } else {
+      openSession(session);
+    }
+  }
+
+  if (!authChecked) return null;
+  if (!user) return <AuthScreen onAuth={handleAuth}/>;
+  if (showPaywall) return (
+    <PaywallScreen
+      sessionTitle={paywallSession?.title||"this session"}
+      user={user}
+      onSubscribe={handleSubscribe}
+      onBack={()=>setShowPaywall(false)}
+    />
+  );
+
+  return <BrainThrive user={user} onSignOut={handleSignOut} onSessionLocked={(s,cb)=>handleSessionClick(s,cb)} isLocked={(s)=>isSessionLocked(s.id,user)}/>;
+}
+
+// ─── Main app (was export default) ────────────────────────────────
+function BrainThrive({ user, onSignOut, onSessionLocked, isLocked }) {
   const [tab, setTab]                     = useState("home");
   const [pillarFilter, setPillarFilter]   = useState("All");
   const [sessionActive, setSessionActive] = useState(null);
@@ -155,6 +442,12 @@ export default function BrainThrive() {
   const [logSaved, setLogSaved]           = useState(false);
   const [wisdomText, setWisdomText]       = useState("");
   const [wisdomPosted, setWisdomPosted]   = useState(false);
+  const [communityPosts, setCommunityPosts] = useState(wisdomPosts);
+  const [likedPosts, setLikedPosts]       = useState([]);
+  const [replyText, setReplyText]         = useState("");
+  const [replyTarget, setReplyTarget]     = useState(null);
+  const [feedbackText, setFeedbackText]   = useState("");
+  const [feedbackSent, setFeedbackSent]   = useState(false);
   const [aiPrompt, setAiPrompt]           = useState("");
   const [playlist, setPlaylist]           = useState(null);
   const [playlistLoading, setPlaylistLoading] = useState(false);
@@ -164,6 +457,46 @@ export default function BrainThrive() {
   const [referralName, setReferralName]   = useState("");
   const [referralSent, setReferralSent]   = useState(false);
   const [copied, setCopied]               = useState(false);
+  const [sessionComplete, setSessionComplete] = useState(false);
+  const [nextSuggestions, setNextSuggestions] = useState(null);
+  const [nextLoading, setNextLoading]     = useState(false);
+  const [editingProfile, setEditingProfile] = useState(false);
+  const [profileName, setProfileName]     = useState(user?.name || "");
+  const [profileAge, setProfileAge]       = useState(user?.age || "");
+  const [profileLocation, setProfileLocation] = useState(user?.location || "");
+  const [profileSaved, setProfileSaved]   = useState(false);
+
+  function loadStats() {
+    try {
+      const raw = localStorage.getItem("bt_stats_" + (user?.email||"guest"));
+      return raw ? JSON.parse(raw) : { sessionsCompleted:[], minutesTotal:0, streak:0, lastActive:null, healthLogs:[], wisdomPosts:[], referralsSent:[] };
+    } catch { return { sessionsCompleted:[], minutesTotal:0, streak:0, lastActive:null, healthLogs:[], wisdomPosts:[], referralsSent:[] }; }
+  }
+  function saveStats(stats) {
+    try { localStorage.setItem("bt_stats_" + (user?.email||"guest"), JSON.stringify(stats)); } catch {}
+  }
+  function recordSessionComplete(s) {
+    const stats = loadStats();
+    const id = s.id;
+    if (id && !stats.sessionsCompleted.includes(id)) stats.sessionsCompleted.push(id);
+    stats.minutesTotal = (stats.minutesTotal||0) + (s.duration||15);
+    const today = new Date().toDateString();
+    if (stats.lastActive !== today) {
+      const yesterday = new Date(Date.now()-86400000).toDateString();
+      stats.streak = stats.lastActive === yesterday ? (stats.streak||0)+1 : 1;
+      stats.lastActive = today;
+    }
+    saveStats(stats);
+  }
+  function recordHealthLog(log) {
+    const stats = loadStats();
+    stats.healthLogs = [{ date:new Date().toISOString(), ...log }, ...(stats.healthLogs||[]).slice(0,29)];
+    saveStats(stats);
+  }
+
+  const userStats = loadStats();
+  const completedIds = new Set(userStats.sessionsCompleted||[]);
+  const streakDisplay = userStats.streak || 0;
 
   const timerRef = useRef(null);
   const poseRef  = useRef(null);
@@ -228,6 +561,39 @@ export default function BrainThrive() {
 
   const fmtTime = s=>`${String(Math.floor(s/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;
 
+  async function completeSession(s) {
+    recordSessionComplete(s);
+    setSessionComplete(true);
+    setNextLoading(true);
+    setNextSuggestions(null);
+    clearInterval(timerRef.current);
+    clearInterval(poseRef.current);
+    setCameraOn(false); setPoseMsg("");
+    const completedPillar = s.p||s.pillar;
+    const completedTitle  = s.t||s.title;
+    const completedLevel  = s.level||"Gentle";
+    const remaining = ["Move","Calm","Think"].filter(p=>p!==completedPillar);
+    try {
+      const res = await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST", headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+          model:"claude-sonnet-4-20250514", max_tokens:600,
+          system:`You are Sage, BrainThrive's warm AI companion for seniors. The user just finished a session. Suggest exactly 3 next sessions from this library. Prioritise completing their daily ritual (Move, Calm, Think) if pillars are missing today. Be warm and encouraging. Session library: Morning Baduanjin Flow (Move,15,Gentle), Eight Brocades Introduction (Move,12,Gentle), Chair-Assisted Baduanjin (Move,15,Gentle), PMR Evening Wind-Down (Move,15,Gentle), Eight Brocades Full Sequence (Move,20,Moderate), Balance & Steady Stance (Move,18,Moderate), Acupressure Calm Reset (Calm,10,Gentle), Hand Meridian Sequence (Calm,8,Gentle), Ear Acupressure for Sleep (Calm,8,Gentle), 4-7-8 Breathing Reset (Calm,8,Gentle), Breath & Pressure Points (Calm,12,Moderate), Memory Pattern Challenge (Think,15,Gentle), Name & Face Recall (Think,12,Gentle), Word Association Starter (Think,10,Gentle), Working Memory Sprint (Think,18,Moderate), Pattern Recognition Boost (Think,20,Energising). Respond ONLY with valid JSON no markdown: {"encouragement":"one warm sentence praising what they just did","suggestions":[{"title":"...","pillar":"Move|Calm|Think","duration":number,"level":"...","reason":"short warm reason 6 words max"}]}`,
+          messages:[{role:"user",content:`Just completed: "${completedTitle}" (${completedPillar}, ${completedLevel}). Still needed today: ${remaining.join(", ")||"all pillars done"}.`}],
+        }),
+      });
+      const data = await res.json();
+      const text = data.content?.map(b=>b.text||"").join("")||"";
+      setNextSuggestions(JSON.parse(text.replace(/```json|```/g,"").trim()));
+    } catch {
+      setNextSuggestions({
+        encouragement:"Well done — every session brings you closer to your best self.",
+        suggestions: sessions.filter(x=>x.pillar!==completedPillar&&x.level==="Gentle").slice(0,3).map(x=>({title:x.title,pillar:x.pillar,duration:x.duration,level:x.level,reason:"Completes your daily ritual"}))
+      });
+    }
+    setNextLoading(false);
+  }
+
   const navItems = [
     { id:"home",    icon:"⌂",  label:"Home" },
     { id:"sessions",icon:"▶",  label:"Sessions" },
@@ -267,8 +633,10 @@ export default function BrainThrive() {
           </div>
         </div>
         <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-          <div style={{ background:C.goldLight, color:C.gold, fontSize:14, fontWeight:600, padding:"6px 14px", borderRadius:20, border:`1px solid ${C.gold}40` }}>🔥 7-day streak</div>
-          <Avatar letter="E" size={40} />
+          <div style={{ background:C.goldLight, color:C.gold, fontSize:14, fontWeight:600, padding:"6px 14px", borderRadius:20, border:`1px solid ${C.gold}40` }}>{streakDisplay>0 ? "🔥 "+streakDisplay+"-day streak" : "🌿 Start your streak"}</div>
+          {user?.plan==="pro" && <span style={{ background:C.sageLight, color:C.sageDark, fontSize:12, fontWeight:600, padding:"4px 10px", borderRadius:12 }}>PRO ✓</span>}
+          <Avatar letter={(user?.name||"U")[0].toUpperCase()} size={40}/>
+          <button onClick={onSignOut} style={{ background:"none", border:`1px solid ${C.borderMid}`, borderRadius:20, padding:"6px 12px", fontSize:13, color:C.inkMid, cursor:"pointer", fontFamily:"'Inter',sans-serif" }}>Sign out</button>
         </div>
       </header>
 
@@ -306,8 +674,8 @@ export default function BrainThrive() {
               <div style={{ background:`linear-gradient(140deg, ${C.sageDark} 0%, ${C.teal} 100%)`, borderRadius:26, padding:"38px 34px", marginBottom:26, color:"#fff", position:"relative", overflow:"hidden" }}>
                 <div style={{ position:"absolute", right:-30, top:-30, width:200, height:200, borderRadius:"50%", background:"rgba(255,255,255,0.06)" }}/>
                 <div style={{ position:"absolute", right:40, bottom:-50, width:140, height:140, borderRadius:"50%", background:"rgba(255,255,255,0.04)" }}/>
-                <div style={{ fontFamily:"'Lora',serif", fontSize:13, letterSpacing:"2px", textTransform:"uppercase", opacity:0.75, marginBottom:8 }}>Good morning</div>
-                <h1 style={{ fontFamily:"'Lora',serif", fontSize:36, margin:"0 0 10px", fontWeight:600, lineHeight:1.2 }}>Welcome back, Eleanor</h1>
+                <div style={{ fontFamily:"'Lora',serif", fontSize:13, letterSpacing:"2px", textTransform:"uppercase", opacity:0.75, marginBottom:8 }}>{new Date().getHours()<12?"Good morning":new Date().getHours()<17?"Good afternoon":"Good evening"}</div>
+                <h1 style={{ fontFamily:"'Lora',serif", fontSize:36, margin:"0 0 10px", fontWeight:600, lineHeight:1.2 }}>Welcome back, {user?.name || "Friend"}</h1>
                 <p style={{ fontSize:17, opacity:0.85, margin:"0 0 26px", lineHeight:1.6 }}>2 of 3 pillars complete today. You're doing beautifully.</p>
                 <Btn variant="white" size="lg" onClick={()=>setTab("sessions")}>Begin today's ritual →</Btn>
               </div>
@@ -316,7 +684,7 @@ export default function BrainThrive() {
               <div style={{ marginBottom:26 }}>
                 <div style={{ fontFamily:"'Lora',serif", fontSize:20, fontWeight:600, color:C.ink, marginBottom:16 }}>Today's Ritual</div>
                 <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14 }}>
-                  {[{p:"Move",t:"Baduanjin Flow",d:"15 min",done:true},{p:"Calm",t:"Acupressure Reset",d:"10 min",done:true},{p:"Think",t:"Memory Challenge",d:"15 min",done:false}].map(item=>(
+                  {[{p:"Move",t:"Baduanjin Flow",d:"15 min",id:1},{p:"Calm",t:"Auricular Relaxation",d:"30 min",id:14},{p:"Think",t:"Memory Challenge",d:"15 min",id:26}].map(item=>({...item,done:completedIds.has(item.id)})).map(item=>(
                     <Card key={item.p} onClick={()=>{setSessionActive(item);setTab("sessions");}} style={{ padding:22 }}>
                       <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:12 }}>
                         <PillarBadge pillar={item.p}/>
@@ -335,7 +703,7 @@ export default function BrainThrive() {
 
               {/* Stats */}
               <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:12, marginBottom:26 }}>
-                {[{label:"Sessions",val:"48",icon:"▶"},{label:"Day Streak",val:"7",icon:"🔥"},{label:"Minutes",val:"312",icon:"⏱"},{label:"Mind Score",val:"84",icon:"◈"}].map(s=>(
+                {[{label:"Sessions",val:String(userStats.sessionsCompleted?.length||0),icon:"▶"},{label:"Day Streak",val:String(streakDisplay),icon:"🔥"},{label:"Minutes",val:String(userStats.minutesTotal||0),icon:"⏱"},{label:"Mind Score",val:completedIds.size>5?"84":"--",icon:"◈"}].map(s=>(
                   <Card key={s.label} style={{ padding:"18px 14px", textAlign:"center" }}>
                     <div style={{ fontSize:22, marginBottom:4 }}>{s.icon}</div>
                     <div style={{ fontFamily:"'Lora',serif", fontSize:28, fontWeight:600, color:C.ink }}>{s.val}</div>
@@ -401,13 +769,28 @@ export default function BrainThrive() {
                 )}
               </Card>
 
+              {/* Upgrade banner for free users */}
+              {user?.plan !== "pro" && (
+                <div style={{ background:`linear-gradient(135deg,${C.navy||"#1E3A5F"},${C.teal})`, borderRadius:20, padding:"22px 24px", marginBottom:22, color:"#fff", display:"flex", alignItems:"center", gap:18 }}>
+                  <div style={{ fontSize:36, flexShrink:0 }}>🌿</div>
+                  <div style={{ flex:1 }}>
+                    <div style={{ fontFamily:"Georgia,serif", fontSize:17, fontWeight:600, marginBottom:4 }}>You're on the free plan</div>
+                    <div style={{ fontSize:14, opacity:0.85, lineHeight:1.5 }}>You have access to 1 free session. Upgrade to unlock all 36 sessions, AI coaching, and Sage's personalised playlists.</div>
+                  </div>
+                  <button onClick={()=>onSessionLocked({id:99,title:"all sessions"}, ()=>{})}
+                    style={{ background:"#fff", color:C.sageDark, border:"none", borderRadius:22, padding:"10px 20px", fontWeight:600, fontSize:14, cursor:"pointer", flexShrink:0, fontFamily:"Georgia,serif", whiteSpace:"nowrap" }}>
+                    Upgrade $14.99/mo
+                  </button>
+                </div>
+              )}
+
               {/* Refer friend teaser */}
               <Card style={{ padding:24, background:`linear-gradient(135deg,${C.amberLight},#FFF8F0)`, border:`1px solid ${C.amber}30`, cursor:"pointer" }} onClick={()=>setTab("refer")}>
                 <div style={{ display:"flex", alignItems:"center", gap:18 }}>
                   <div style={{ width:54, height:54, borderRadius:16, background:C.amber, display:"flex", alignItems:"center", justifyContent:"center", fontSize:26, flexShrink:0 }}>🤝</div>
                   <div style={{ flex:1 }}>
                     <div style={{ fontFamily:"'Lora',serif", fontSize:18, fontWeight:600, color:C.ink, marginBottom:4 }}>Invite a Friend or Neighbor</div>
-                    <div style={{ fontSize:14, color:C.inkMid, lineHeight:1.5 }}>Wellness is better together — they get 3 months free, and so do you.</div>
+                    <div style={{ fontSize:14, color:C.inkMid, lineHeight:1.5 }}>Wellness is better together — they get 1 month free, and so do you.</div>
                   </div>
                   <div style={{ color:C.amber, fontSize:24 }}>›</div>
                 </div>
@@ -420,7 +803,7 @@ export default function BrainThrive() {
             <div>
               {sessionActive ? (
                 <div>
-                  <button onClick={()=>{setSessionActive(null);setCameraOn(false);}}
+                  <button onClick={()=>{setSessionActive(null);setCameraOn(false);setSessionComplete(false);setNextSuggestions([]);setSessionTimer(0);}}
                     style={{ background:"none", border:"none", cursor:"pointer", color:C.sage, fontSize:15, marginBottom:22, fontFamily:"'Inter',sans-serif", fontWeight:500 }}>
                     ← Back to sessions
                   </button>
@@ -448,17 +831,62 @@ export default function BrainThrive() {
                       );
                     })()}
 
-                    {sessionTimer>0 && <div style={{ textAlign:"center", fontFamily:"'Lora',serif", fontSize:38, color:C.sage, marginBottom:18 }}>{fmtTime(sessionTimer)}</div>}
+                    {sessionTimer>0 && !sessionComplete && <div style={{ textAlign:"center", fontFamily:"'Lora',serif", fontSize:38, color:C.sage, marginBottom:18 }}>{fmtTime(sessionTimer)}</div>}
 
-                    <div style={{ display:"flex", gap:12, marginBottom:20, flexWrap:"wrap" }}>
-                      {sessionTimer===0
-                        ? <Btn variant="primary" size="lg" onClick={()=>setSessionActive({...sessionActive,running:true})}>Begin session</Btn>
-                        : <Btn variant="primary" size="lg" onClick={()=>setSessionActive(null)}>Complete ✓</Btn>
-                      }
-                      <Btn variant={cameraOn?"teal":"ghostGray"} onClick={()=>setCameraOn(c=>!c)}>
-                        {cameraOn?"📷 AI coaching on":"📷 Enable AI coaching"}
-                      </Btn>
-                    </div>
+                    {/* Post-session — AI next suggestions */}
+                    {sessionComplete ? (
+                      <div style={{ marginBottom:20 }}>
+                        {/* Completion celebration */}
+                        <div style={{ background:`linear-gradient(135deg,${C.sageLight},${C.tealLight})`, borderRadius:18, padding:24, textAlign:"center", marginBottom:20, border:`1px solid ${C.sage}30` }}>
+                          <div style={{ fontSize:48, marginBottom:8 }}>🌿</div>
+                          <div style={{ fontFamily:"'Lora',serif", fontSize:22, fontWeight:600, color:C.sageDark, marginBottom:6 }}>Session complete!</div>
+                          {nextLoading
+                            ? <div style={{ fontSize:15, color:C.inkMid, fontStyle:"italic" }}>Sage is choosing your next session...</div>
+                            : nextSuggestions.encouragement && <div style={{ fontSize:16, color:C.inkMid, fontStyle:"italic", lineHeight:1.6 }}>"{nextSuggestions.encouragement}"</div>
+                          }
+                        </div>
+
+                        {/* Next session suggestions */}
+                        {!nextLoading && nextSuggestions.suggestions?.length > 0 && (
+                          <div>
+                            <div style={{ fontFamily:"'Lora',serif", fontSize:18, fontWeight:600, color:C.ink, marginBottom:14 }}>What Sage suggests next</div>
+                            <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:20 }}>
+                              {nextSuggestions.suggestions.map((s, i) => (
+                                <div key={i}
+                                  onClick={() => { setSessionComplete(false); setNextSuggestions([]); setSessionTimer(0); setSessionActive(sessions.find(x=>x.title===s.title)||{...s,videoUrl:""}); }}
+                                  style={{ background:"#fff", borderRadius:16, padding:"16px 18px", display:"flex", alignItems:"center", gap:14, border:`1.5px solid ${i===0?pillarColor[s.pillar]:C.border}`, cursor:"pointer", transition:"all 0.2s", position:"relative" }}>
+                                  {i===0 && <div style={{ position:"absolute", top:-10, left:16, background:pillarColor[s.pillar], color:"#fff", fontSize:11, fontWeight:700, padding:"2px 10px", borderRadius:10 }}>Sage's top pick</div>}
+                                  <div style={{ width:48, height:48, borderRadius:14, background:pillarBg[s.pillar], display:"flex", alignItems:"center", justifyContent:"center", fontSize:22, flexShrink:0 }}>
+                                    {pillarIcon[s.pillar]}
+                                  </div>
+                                  <div style={{ flex:1 }}>
+                                    <div style={{ fontFamily:"'Lora',serif", fontSize:16, fontWeight:600, color:C.ink, marginBottom:3 }}>{s.title}</div>
+                                    <div style={{ fontSize:13, color:C.inkLight }}>{s.pillar} · {s.duration} min · {s.level}</div>
+                                    <div style={{ fontSize:13, color:pillarColor[s.pillar], marginTop:3, fontWeight:500 }}>{s.reason}</div>
+                                  </div>
+                                  <span style={{ color:C.inkLight, fontSize:20 }}>›</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        <div style={{ display:"flex", gap:10 }}>
+                          <Btn variant="ghostGray" onClick={()=>{ setSessionComplete(false); setNextSuggestions([]); setSessionActive(null); setSessionTimer(0); }}>Back to library</Btn>
+                          <Btn variant="ghost" onClick={()=>setTab("home")}>Go to home</Btn>
+                        </div>
+                      </div>
+                    ) : (
+                      <div style={{ display:"flex", gap:12, marginBottom:20, flexWrap:"wrap" }}>
+                        {sessionTimer===0
+                          ? <Btn variant="primary" size="lg" onClick={()=>setSessionActive({...sessionActive,running:true})}>Begin session</Btn>
+                          : <Btn variant="primary" size="lg" onClick={()=>completeSession(sessionActive)}>Complete ✓</Btn>
+                        }
+                        <Btn variant={cameraOn?"teal":"ghostGray"} onClick={()=>setCameraOn(c=>!c)}>
+                          {cameraOn?"📷 AI coaching on":"📷 Enable AI coaching"}
+                        </Btn>
+                      </div>
+                    )}
 
                     {cameraOn && (
                       <div style={{ background:C.tealLight, borderRadius:12, padding:14, marginBottom:18, fontSize:14, color:C.teal, lineHeight:1.6 }}>
@@ -487,11 +915,12 @@ export default function BrainThrive() {
                   </div>
                   <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
                     {sessions.filter(s=>pillarFilter==="All"||s.pillar===pillarFilter).map(s=>(
-                      <Card key={s.id} onClick={()=>setSessionActive(s)} style={{ padding:"18px 22px", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+                      <Card key={s.id} onClick={()=>onSessionLocked(s, setSessionActive)} style={{ padding:"18px 22px", display:"flex", alignItems:"center", justifyContent:"space-between", opacity: isLocked(s) ? 0.85 : 1 }}>
                         <div style={{ display:"flex", alignItems:"center", gap:16 }}>
                           <div style={{ width:52, height:52, borderRadius:16, background:pillarBg[s.pillar], display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, flexShrink:0, position:"relative" }}>
                             {pillarIcon[s.pillar]}
-                            {s.videoUrl && <div style={{ position:"absolute", bottom:-2, right:-2, width:14, height:14, borderRadius:"50%", background:C.sage, border:"2px solid #fff" }}/>}
+                            {s.videoUrl && !isLocked(s) && <div style={{ position:"absolute", bottom:-2, right:-2, width:14, height:14, borderRadius:"50%", background:C.sage, border:"2px solid #fff" }}/>}
+                            {isLocked(s) && <div style={{ position:"absolute", bottom:-2, right:-2, width:18, height:18, borderRadius:"50%", background:C.amber, border:"2px solid #fff", display:"flex", alignItems:"center", justifyContent:"center", fontSize:9 }}>🔒</div>}
                           </div>
                           <div>
                             <div style={{ fontFamily:"'Lora',serif", fontSize:17, fontWeight:600, color:C.ink, marginBottom:5 }}>{s.title}</div>
@@ -503,8 +932,8 @@ export default function BrainThrive() {
                         </div>
                         <div style={{ display:"flex", alignItems:"center", gap:10 }}>
                           {s.completed && <span style={{ fontSize:12, color:C.sage, background:C.sageLight, padding:"4px 10px", borderRadius:12, fontWeight:600 }}>✓ Done</span>}
-                          {!s.videoUrl && <span style={{ fontSize:11, color:C.amber, background:C.amberLight, padding:"3px 8px", borderRadius:10 }}>Soon</span>}
-                          <span style={{ color:C.inkLight, fontSize:22 }}>›</span>
+                          {!s.videoUrl && !isLocked(s) && <span style={{ fontSize:11, color:C.amber, background:C.amberLight, padding:"3px 8px", borderRadius:10 }}>Soon</span>}
+                          {isLocked(s) ? <span style={{ fontSize:12, color:C.amber, background:C.amberLight, padding:"4px 10px", borderRadius:12, fontWeight:600 }}>PRO</span> : <span style={{ color:C.inkLight, fontSize:22 }}>›</span>}
                         </div>
                       </Card>
                     ))}
@@ -637,7 +1066,7 @@ export default function BrainThrive() {
                   <textarea rows={2} placeholder="Any physical sensations, observations, or thoughts..." style={{ resize:"vertical" }}/>
                 </div>
 
-                <Btn variant="primary" size="lg" onClick={()=>setLogSaved(true)}>Save today's log</Btn>
+                <Btn variant="primary" size="lg" onClick={()=>{ recordHealthLog({ mood:metrics[0].today, sleep:metrics[1].today, stress:metrics[2].today, energy:metrics[3].today }); setLogSaved(true); }}>Save today's log</Btn>
               </Card>
 
               <Card style={{ padding:24 }}>
@@ -661,50 +1090,105 @@ export default function BrainThrive() {
               <h2 style={{ fontFamily:"'Lora',serif", fontSize:28, margin:"0 0 6px", fontWeight:600 }}>Community</h2>
               <p style={{ color:C.inkLight, margin:"0 0 24px", fontSize:16 }}>Stories, wisdom and encouragement from your BrainThrive family</p>
 
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:28 }}>
-                {[{icon:"🏛️",title:"Wisdom Wall",desc:"Featured stories & life wisdom"},{icon:"💬",title:"Peer Discussion",desc:"Tips & encouragement"},{icon:"🌍",title:"Share Wisdom",desc:"Post your story or video"},{icon:"📢",title:"Feedback",desc:"Help us build better tools"}].map(s=>(
-                  <Card key={s.title} style={{ padding:22, cursor:"pointer" }}>
-                    <div style={{ fontSize:30, marginBottom:10 }}>{s.icon}</div>
-                    <div style={{ fontFamily:"'Lora',serif", fontSize:16, fontWeight:600, marginBottom:4 }}>{s.title}</div>
-                    <div style={{ fontSize:13, color:C.inkLight }}>{s.desc}</div>
-                  </Card>
-                ))}
-              </div>
-
-              <div style={{ fontFamily:"'Lora',serif", fontSize:20, fontWeight:600, marginBottom:18 }}>🏛️ Featured Wisdom</div>
+              {/* 🏛️ Wisdom Wall */}
+              <div style={{ fontFamily:"'Lora',serif", fontSize:20, fontWeight:600, marginBottom:18 }}>🏛️ Wisdom Wall</div>
               <div style={{ display:"flex", flexDirection:"column", gap:16, marginBottom:28 }}>
-                {wisdomPosts.map(post=>(
+                {communityPosts.map(post=>(
                   <Card key={post.id} style={{ padding:26 }}>
-                    <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:16 }}>
-                      <Avatar letter={post.avatar}/>
+                    <div style={{ display:"flex", alignItems:"center", gap:14, marginBottom:14 }}>
+                      <Avatar letter={post.avatar} bg={pillarBg.Calm} color={C.teal}/>
                       <div>
-                        <div style={{ fontWeight:600, fontSize:16 }}>{post.author}, {post.age}</div>
+                        <div style={{ fontWeight:600, fontSize:16 }}>{post.author}{post.age ? `, ${post.age}` : ""}</div>
                         <div style={{ fontSize:13, color:C.inkLight }}>{post.location}</div>
                       </div>
                       <span style={{ marginLeft:"auto", fontSize:12, background:C.amberLight, color:C.amber, padding:"4px 10px", borderRadius:12, fontWeight:500, textTransform:"capitalize" }}>{post.type}</span>
                     </div>
-                    <p style={{ fontSize:16, color:C.ink, lineHeight:1.75, margin:"0 0 16px", fontStyle:"italic", fontFamily:"'Lora',serif" }}>"{post.content}"</p>
+                    <p style={{ fontSize:16, color:C.ink, lineHeight:1.75, margin:"0 0 14px", fontStyle:"italic", fontFamily:"'Lora',serif" }}>"{post.content}"</p>
+
+                    {/* Reply thread */}
+                    {post.replies?.length > 0 && (
+                      <div style={{ borderLeft:`3px solid ${C.sageLight}`, paddingLeft:14, marginBottom:14 }}>
+                        {post.replies.map((r,i)=>(
+                          <div key={i} style={{ fontSize:14, color:C.inkMid, marginBottom:6 }}>
+                            <strong style={{ color:C.ink }}>{r.author}:</strong> {r.text}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Reply input */}
+                    {replyTarget===post.id && (
+                      <div style={{ display:"flex", gap:8, marginBottom:12 }}>
+                        <input type="text" value={replyText} onChange={e=>setReplyText(e.target.value)}
+                          placeholder="Write a reply..." style={{ flex:1, fontFamily:"'Inter',sans-serif", fontSize:14, border:`1.5px solid ${C.borderMid}`, borderRadius:10, padding:"8px 12px", outline:"none" }}/>
+                        <Btn variant="primary" size="sm" onClick={()=>{
+                          if (!replyText.trim()) return;
+                          setCommunityPosts(ps=>ps.map(p=>p.id===post.id?{...p,replies:[...(p.replies||[]),{author:user?.name||"You",text:replyText}]}:p));
+                          setReplyText(""); setReplyTarget(null);
+                        }}>Send</Btn>
+                        <Btn variant="ghostGray" size="sm" onClick={()=>{setReplyTarget(null);setReplyText("");}}>Cancel</Btn>
+                      </div>
+                    )}
+
                     <div style={{ display:"flex", gap:10 }}>
-                      <Btn variant="ghostGray" size="sm">♡ {post.likes}</Btn>
-                      <Btn variant="ghostGray" size="sm">Reply</Btn>
+                      <Btn variant="ghostGray" size="sm" onClick={()=>{
+                        if (likedPosts.includes(post.id)) {
+                          setLikedPosts(l=>l.filter(id=>id!==post.id));
+                          setCommunityPosts(ps=>ps.map(p=>p.id===post.id?{...p,likes:p.likes-1}:p));
+                        } else {
+                          setLikedPosts(l=>[...l,post.id]);
+                          setCommunityPosts(ps=>ps.map(p=>p.id===post.id?{...p,likes:p.likes+1}:p));
+                        }
+                      }} style={{ color:likedPosts.includes(post.id)?C.amber:undefined }}>
+                        {likedPosts.includes(post.id)?"♥":"♡"} {post.likes}
+                      </Btn>
+                      <Btn variant="ghostGray" size="sm" onClick={()=>setReplyTarget(replyTarget===post.id?null:post.id)}>
+                        {replyTarget===post.id?"Cancel":"Reply"}
+                      </Btn>
                     </div>
                   </Card>
                 ))}
               </div>
 
-              <Card style={{ padding:30, background:"linear-gradient(135deg,#1C1C2E,#2B3A5C)", border:"none" }}>
+              {/* 🌍 Share Your Wisdom */}
+              <Card style={{ padding:30, background:"linear-gradient(135deg,#1C1C2E,#2B3A5C)", border:"none", marginBottom:20 }}>
                 <div style={{ fontFamily:"'Lora',serif", fontSize:20, fontWeight:600, color:"#fff", marginBottom:6 }}>🌍 Share Your Wisdom</div>
                 <div style={{ fontSize:14, color:"rgba(255,255,255,0.7)", marginBottom:22 }}>Your story could inspire thousands of seniors worldwide.</div>
                 {wisdomPosted ? (
-                  <div style={{ background:"rgba(92,138,110,0.3)", borderRadius:14, padding:20, color:"#9DC0AC", textAlign:"center", fontSize:16 }}>✓ Your wisdom has been shared. Thank you, Eleanor!</div>
+                  <div style={{ background:"rgba(92,138,110,0.3)", borderRadius:14, padding:20, color:"#9DC0AC", textAlign:"center", fontSize:16 }}>
+                    ✓ Your wisdom has been shared. Thank you, {user?.name||"friend"}!
+                    <div style={{ marginTop:10 }}><Btn variant="ghostGray" size="sm" style={{ color:"#fff", borderColor:"rgba(255,255,255,0.3)" }} onClick={()=>setWisdomPosted(false)}>Share another</Btn></div>
+                  </div>
                 ) : (
                   <div>
-                    <textarea value={wisdomText} onChange={e=>setWisdomText(e.target.value)} rows={3} placeholder="Share a piece of wisdom, a story, or a tip for others..." style={{ background:"rgba(255,255,255,0.1)", border:"1.5px solid rgba(255,255,255,0.2)", color:"#fff", marginBottom:14 }}/>
+                    <textarea value={wisdomText} onChange={e=>setWisdomText(e.target.value)} rows={3}
+                      placeholder="Share a piece of wisdom, a story, or a tip for others..."
+                      style={{ background:"rgba(255,255,255,0.1)", border:"1.5px solid rgba(255,255,255,0.2)", color:"#fff", marginBottom:14, width:"100%", borderRadius:12, padding:"12px 16px", fontFamily:"'Inter',sans-serif", fontSize:15 }}/>
                     <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
-                      <Btn variant="ghostGray" size="sm" style={{ color:"#fff", borderColor:"rgba(255,255,255,0.3)" }}>🎥 Video</Btn>
-                      <Btn variant="ghostGray" size="sm" style={{ color:"#fff", borderColor:"rgba(255,255,255,0.3)" }}>🎙 Audio</Btn>
-                      <Btn variant="primary" onClick={()=>{if(wisdomText.trim())setWisdomPosted(true);}} style={{ marginLeft:"auto" }}>Post →</Btn>
+                      <Btn variant="primary" onClick={()=>{
+                        if (!wisdomText.trim()) return;
+                        const newPost = { id:Date.now(), author:user?.name||"You", age:"", avatar:(user?.name||"Y")[0].toUpperCase(), location:"", content:wisdomText, likes:0, type:"wisdom", replies:[] };
+                        setCommunityPosts(ps=>[newPost,...ps]);
+                        const stats=loadStats(); stats.wisdomPosts=[newPost,...(stats.wisdomPosts||[])]; saveStats(stats);
+                        setWisdomPosted(true); setWisdomText("");
+                      }} style={{ marginLeft:"auto" }}>Post →</Btn>
                     </div>
+                  </div>
+                )}
+              </Card>
+
+              {/* 📢 Platform Feedback */}
+              <Card style={{ padding:26 }}>
+                <div style={{ fontFamily:"'Lora',serif", fontSize:18, fontWeight:600, marginBottom:6 }}>📢 Share Your Feedback</div>
+                <div style={{ fontSize:14, color:C.inkMid, marginBottom:16 }}>Help us build better tools for you and your community.</div>
+                {feedbackSent ? (
+                  <div style={{ background:C.sageLight, borderRadius:12, padding:16, color:C.sage, fontSize:15 }}>✓ Thank you — your feedback means the world to us!</div>
+                ) : (
+                  <div>
+                    <textarea value={feedbackText} onChange={e=>setFeedbackText(e.target.value)} rows={3}
+                      placeholder="What's working well? What could be better? Any features you'd love to see?"
+                      style={{ marginBottom:12, resize:"vertical", width:"100%", fontFamily:"'Inter',sans-serif", fontSize:15, border:`1.5px solid ${C.borderMid}`, borderRadius:12, padding:"12px 16px", outline:"none" }}/>
+                    <Btn variant="primary" onClick={()=>{ if(feedbackText.trim()) setFeedbackSent(true); }}>Send feedback</Btn>
                   </div>
                 )}
               </Card>
@@ -721,7 +1205,7 @@ export default function BrainThrive() {
                 <div style={{ fontSize:60, marginBottom:14 }}>🤝</div>
                 <h2 style={{ fontFamily:"'Lora',serif", fontSize:34, margin:"0 0 12px", fontWeight:600 }}>Invite a Friend or Neighbor</h2>
                 <p style={{ fontSize:19, opacity:0.9, margin:"0 0 8px", lineHeight:1.5 }}>Wellness is better when shared.</p>
-                <p style={{ fontSize:16, opacity:0.82, margin:0, lineHeight:1.7 }}>When a friend joins with your link,<br/><strong>they get 3 months free — and so do you.</strong></p>
+                <p style={{ fontSize:16, opacity:0.82, margin:0, lineHeight:1.7 }}>When a friend joins with your link,<br/><strong>they get 1 month free — and so do you.</strong></p>
               </div>
 
               {/* How it works */}
@@ -731,7 +1215,7 @@ export default function BrainThrive() {
                   {[
                     {icon:"✉️",title:"Send your personal invite",     desc:"Enter your friend's name and email — we'll send them a warm note from you."},
                     {icon:"🎁",title:"They join for free",             desc:"Your friend gets 3 full months of BrainThrive at no cost. No credit card needed."},
-                    {icon:"🌿",title:"You both get 3 months free",     desc:"Once they complete their first session, both accounts are credited 3 free months."},
+                    {icon:"🌿",title:"You both get 1 month free",     desc:"Once they complete their first session, both accounts are credited 1 free month."},
                     {icon:"🧘",title:"Practice together",              desc:"You'll see each other's streaks and cheer each other on in the Community."},
                   ].map(s=>(
                     <div key={s.title} style={{ display:"flex", alignItems:"flex-start", gap:16 }}>
@@ -754,7 +1238,7 @@ export default function BrainThrive() {
                   <div style={{ background:C.sageLight, borderRadius:18, padding:28, textAlign:"center" }}>
                     <div style={{ fontSize:48, marginBottom:12 }}>🎉</div>
                     <div style={{ fontFamily:"'Lora',serif", fontSize:22, fontWeight:600, color:C.sage, marginBottom:8 }}>Invite sent to {referralName}!</div>
-                    <div style={{ fontSize:15, color:C.inkMid, marginBottom:22, lineHeight:1.6 }}>We've sent {referralName} a warm welcome note from you. Once they complete their first session, you'll both receive 3 free months.</div>
+                    <div style={{ fontSize:15, color:C.inkMid, marginBottom:22, lineHeight:1.6 }}>We've sent {referralName} a warm welcome note from you. Once they complete their first session, you'll both receive 1 free month.</div>
                     <Btn variant="ghost" onClick={()=>{setReferralSent(false);setReferralName("");setReferralEmail("");}}>Invite someone else</Btn>
                   </div>
                 ) : (
@@ -774,13 +1258,20 @@ export default function BrainThrive() {
                         <div style={{ fontSize:15, color:C.inkMid, lineHeight:1.8 }}>
                           <em>Hi {referralName},</em><br/><br/>
                           Your friend <strong>Eleanor</strong> thinks you'd love BrainThrive — a gentle daily program for memory, calm, and movement designed for people just like us.<br/><br/>
-                          She's invited you to join her, and as her guest you get <strong>3 months completely free</strong> — no credit card needed.<br/><br/>
+                          She's invited you to join her, and as her guest you get <strong>1 month completely free</strong> — no credit card needed.<br/><br/>
                           <em>— The BrainThrive team</em>
                         </div>
                       </div>
                     )}
 
-                    <Btn variant="amber" size="lg" onClick={()=>{if(referralName&&referralEmail)setReferralSent(true);}}>
+                    <Btn variant="amber" size="lg" onClick={()=>{
+                      if(referralName&&referralEmail){
+                        const stats=loadStats();
+                        stats.referralsSent=[...(stats.referralsSent||[]),{name:referralName,email:referralEmail,date:new Date().toISOString()}];
+                        saveStats(stats);
+                        setReferralSent(true);
+                      }
+                    }}>
                       Send invite to {referralName||"your friend"} →
                     </Btn>
                   </div>
@@ -811,20 +1302,59 @@ export default function BrainThrive() {
             <div>
               <h2 style={{ fontFamily:"'Lora',serif", fontSize:28, margin:"0 0 24px", fontWeight:600 }}>My Profile</h2>
 
-              <Card style={{ padding:30, marginBottom:20, display:"flex", alignItems:"center", gap:22 }}>
-                <Avatar letter="E" size={76} bg={C.sageLight} color={C.sageDark}/>
-                <div>
-                  <div style={{ fontFamily:"'Lora',serif", fontSize:26, fontWeight:600, marginBottom:5 }}>Eleanor M.</div>
-                  <div style={{ fontSize:15, color:C.inkMid, marginBottom:10 }}>Age 68 · Portland, OR · Member since Jan 2025</div>
-                  <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
-                    <span style={{ background:C.goldLight, color:C.gold, fontSize:13, fontWeight:600, padding:"5px 13px", borderRadius:18 }}>🔥 7-day streak</span>
-                    <span style={{ background:C.tealLight, color:C.teal, fontSize:13, fontWeight:500, padding:"5px 13px", borderRadius:18 }}>Moderate level</span>
+              {/* Profile card */}
+              <Card style={{ padding:30, marginBottom:20 }}>
+                {editingProfile ? (
+                  <div>
+                    <div style={{ fontFamily:"'Lora',serif", fontSize:18, fontWeight:600, marginBottom:20 }}>Edit your profile</div>
+                    <div style={{ marginBottom:14 }}>
+                      <label style={{ fontSize:14, color:C.inkMid, display:"block", marginBottom:6 }}>Your name</label>
+                      <input type="text" value={profileName} onChange={e=>setProfileName(e.target.value)} style={{ fontFamily:"'Inter',sans-serif", fontSize:15, border:`1.5px solid ${C.borderMid}`, borderRadius:12, padding:"10px 14px", width:"100%", outline:"none", boxSizing:"border-box" }}/>
+                    </div>
+                    <div style={{ marginBottom:14 }}>
+                      <label style={{ fontSize:14, color:C.inkMid, display:"block", marginBottom:6 }}>Age</label>
+                      <input type="number" value={profileAge} onChange={e=>setProfileAge(e.target.value)} style={{ fontFamily:"'Inter',sans-serif", fontSize:15, border:`1.5px solid ${C.borderMid}`, borderRadius:12, padding:"10px 14px", width:100, outline:"none" }}/>
+                    </div>
+                    <div style={{ marginBottom:20 }}>
+                      <label style={{ fontSize:14, color:C.inkMid, display:"block", marginBottom:6 }}>Location (city, state)</label>
+                      <input type="text" value={profileLocation} onChange={e=>setProfileLocation(e.target.value)} placeholder="e.g. Portland, OR" style={{ fontFamily:"'Inter',sans-serif", fontSize:15, border:`1.5px solid ${C.borderMid}`, borderRadius:12, padding:"10px 14px", width:"100%", outline:"none", boxSizing:"border-box" }}/>
+                    </div>
+                    {profileSaved && <div style={{ color:C.sage, fontSize:14, marginBottom:12 }}>✓ Profile updated!</div>}
+                    <div style={{ display:"flex", gap:10 }}>
+                      <Btn variant="primary" onClick={()=>{
+                        const updated = { ...user, name:profileName, age:profileAge, location:profileLocation };
+                        localStorage.setItem("bt_user", JSON.stringify(updated));
+                        setProfileSaved(true);
+                        setTimeout(()=>{ setEditingProfile(false); setProfileSaved(false); }, 1200);
+                      }}>Save changes</Btn>
+                      <Btn variant="ghostGray" onClick={()=>setEditingProfile(false)}>Cancel</Btn>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div style={{ display:"flex", alignItems:"center", gap:22 }}>
+                    <Avatar letter={(user?.name||"U")[0].toUpperCase()} size={76} bg={C.sageLight} color={C.sageDark}/>
+                    <div style={{ flex:1 }}>
+                      <div style={{ fontFamily:"'Lora',serif", fontSize:24, fontWeight:600, marginBottom:5 }}>{user?.name||"Your Name"}</div>
+                      <div style={{ fontSize:15, color:C.inkMid, marginBottom:10 }}>
+                        {user?.age ? `Age ${user.age} · ` : ""}{user?.location || "Add your location"} · {user?.plan==="pro" ? "Pro member" : "Free member"}
+                      </div>
+                      <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginBottom:12 }}>
+                        <span style={{ background:C.goldLight, color:C.gold, fontSize:13, fontWeight:600, padding:"5px 13px", borderRadius:18 }}>{streakDisplay>0?"🔥 "+streakDisplay+"-day streak":"🌿 Start your streak"}</span>
+                        {user?.plan==="pro" && <span style={{ background:C.sageLight, color:C.sageDark, fontSize:13, fontWeight:600, padding:"5px 13px", borderRadius:18 }}>PRO ✓</span>}
+                      </div>
+                      <Btn variant="ghostGray" size="sm" onClick={()=>setEditingProfile(true)}>Edit profile</Btn>
+                    </div>
+                  </div>
+                )}
               </Card>
 
+              {/* Stats */}
               <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:14, marginBottom:20 }}>
-                {[{label:"Sessions",val:"48"},{label:"Wisdom Posts",val:"3"},{label:"Friends Invited",val:"3"}].map(s=>(
+                {[
+                  {label:"Sessions done",  val:String(userStats.sessionsCompleted?.length||0)},
+                  {label:"Wisdom posts",   val:String(userStats.wisdomPosts?.length||0)},
+                  {label:"Friends invited",val:String(userStats.referralsSent?.length||0)},
+                ].map(s=>(
                   <Card key={s.label} style={{ padding:20, textAlign:"center" }}>
                     <div style={{ fontFamily:"'Lora',serif", fontSize:32, fontWeight:600 }}>{s.val}</div>
                     <div style={{ fontSize:13, color:C.inkLight, marginTop:4 }}>{s.label}</div>
@@ -832,16 +1362,41 @@ export default function BrainThrive() {
                 ))}
               </div>
 
+              {/* Sage companion */}
               <Card style={{ padding:26, marginBottom:20, background:C.lavenderLight, border:`1px solid ${C.lavender}25` }}>
                 <div style={{ display:"flex", alignItems:"center", gap:16 }}>
                   <div style={{ width:62, height:62, borderRadius:"50%", background:`linear-gradient(135deg,${C.lavender},${C.teal})`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:28 }}>🌿</div>
                   <div>
                     <div style={{ fontFamily:"'Lora',serif", fontSize:18, fontWeight:600, color:C.lavender }}>Sage — Your AI Companion</div>
-                    <div style={{ fontSize:14, color:C.inkMid, marginTop:5, fontStyle:"italic", lineHeight:1.6 }}>"You've completed 48 sessions together. Your dedication is truly inspiring, Eleanor."</div>
+                    <div style={{ fontSize:14, color:C.inkMid, marginTop:5, fontStyle:"italic", lineHeight:1.6 }}>
+                      {userStats.sessionsCompleted?.length > 0
+                        ? `"You've completed ${userStats.sessionsCompleted.length} session${userStats.sessionsCompleted.length>1?"s":""} so far${streakDisplay>1?` and you're on a ${streakDisplay}-day streak`:""}. Keep going — every day counts."`
+                        : `"Welcome, ${user?.name||"friend"}. I'm Sage — your BrainThrive companion. Start your first session and I'll be here to guide you every step of the way."`}
+                    </div>
                   </div>
                 </div>
               </Card>
 
+              {/* Subscription */}
+              <Card style={{ padding:26, marginBottom:20 }}>
+                <div style={{ fontFamily:"'Lora',serif", fontSize:18, fontWeight:600, marginBottom:16 }}>Subscription</div>
+                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 0", borderBottom:`1px solid ${C.border}` }}>
+                  <span style={{ color:C.inkMid, fontSize:15 }}>Current plan</span>
+                  <span style={{ fontWeight:600, color: user?.plan==="pro"?C.sage:C.inkMid }}>{user?.plan==="pro"?"BrainThrive Pro":"Free"}</span>
+                </div>
+                {user?.plan!=="pro" && (
+                  <div style={{ marginTop:14 }}>
+                    <Btn variant="primary" onClick={()=>onSessionLocked({id:99,title:"all sessions"},()=>{})}>Upgrade to Pro — $14.99/month →</Btn>
+                  </div>
+                )}
+                {user?.plan==="pro" && (
+                  <div style={{ marginTop:14, fontSize:14, color:C.inkLight }}>
+                    Full access to all sessions, AI coaching, and new content added monthly.
+                  </div>
+                )}
+              </Card>
+
+              {/* Accessibility */}
               <Card style={{ padding:26 }}>
                 <div style={{ fontFamily:"'Lora',serif", fontSize:18, fontWeight:600, marginBottom:20 }}>Accessibility Settings</div>
                 {[["Large text mode","On"],["High contrast","Off"],["Chair-assisted options","On"],["Audio narration","Off"],["AI coaching camera","Optional per session"]].map(([k,v])=>(
@@ -850,6 +1405,9 @@ export default function BrainThrive() {
                     <span style={{ color:v==="On"||v.startsWith("Optional")?C.sage:C.inkLight, fontWeight:v==="On"?600:400 }}>{v}</span>
                   </div>
                 ))}
+                <div style={{ marginTop:18 }}>
+                  <Btn variant="ghostGray" size="sm" onClick={onSignOut}>Sign out</Btn>
+                </div>
               </Card>
             </div>
           )}
