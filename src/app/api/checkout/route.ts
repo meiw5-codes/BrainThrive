@@ -1,18 +1,11 @@
-// src/app/api/checkout/route.ts
-// ─────────────────────────────────────────────────────────────────
-// Creates a Stripe Checkout session and returns the URL.
-// The client redirects the user to Stripe's hosted payment page.
-// After payment, Stripe redirects back to /dashboard?success=true
-// ─────────────────────────────────────────────────────────────────
-
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-02-25.clover",
-});
 
 export async function POST(req: NextRequest) {
+  const Stripe = (await import("stripe")).default;
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: "2026-02-25.clover",
+  });
+
   try {
     const { priceId, email, name } = await req.json();
 
@@ -26,12 +19,11 @@ export async function POST(req: NextRequest) {
       line_items: [{ price: priceId, quantity: 1 }],
       customer_email: email,
       metadata: { name: name || "" },
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL || "https://brainthrive.vercel.app"}/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url:  `${process.env.NEXT_PUBLIC_APP_URL || "https://brainthrive.vercel.app"}/?cancelled=true`,
-      // Allow promotion codes (for referral discounts)
+      success_url: `${process.env.NEXT_PUBLIC_APP_URL || "https://brainthrive.vercel.app"}/dashboard?success=true`,
+      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL || "https://brainthrive.vercel.app"}/?cancelled=true`,
       allow_promotion_codes: true,
       subscription_data: {
-        trial_period_days: 7, // 7-day free trial — no charge until day 8
+        trial_period_days: 7,
         metadata: { name: name || "", email },
       },
     });
