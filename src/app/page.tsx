@@ -452,7 +452,7 @@ function BrainThrive({ user, onSignOut, onSessionLocked, isLocked }) {
   const [referralSent, setReferralSent]   = useState(false);
   const [copied, setCopied]               = useState(false);
   const [sessionComplete, setSessionComplete] = useState(false);
-  const [nextSuggestions, setNextSuggestions] = useState([]);
+  const [nextSuggestions, setNextSuggestions] = useState<any>(null);
   const [nextLoading, setNextLoading]     = useState(false);
 
   const timerRef = useRef(null);
