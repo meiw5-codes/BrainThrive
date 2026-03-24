@@ -71,10 +71,10 @@ const sessions = [
 ];
 
 const wisdomPosts = [
-  { id:1, author:"Margaret", age:72, avatar:"M", location:"Portland, OR", content:"After 6 weeks I noticed I could remember names at my book club again. Slow and steady — don't skip the calm section, it changed my sleep completely.", likes:47, type:"wisdom" },
-  { id:2, author:"Robert",   age:68, avatar:"R", location:"Austin, TX",   content:"The Eight Brocades felt awkward at first. By week three I was doing it in my backyard at sunrise. Now my grandkids try to copy me.", likes:83, type:"story" },
-  { id:3, author:"Sylvia",   age:65, avatar:"S", location:"Tampa, FL",    content:"I was skeptical about acupressure. Four weeks in and I sleep through the night. The ear points are magic.", likes:61, type:"wisdom" },
-  { id:4, author:"James",    age:74, avatar:"J", location:"Seattle, WA",  content:"Tip for newcomers: do the movement section by a chair for balance support. No shame in it — I did it for 2 months.", likes:39, type:"tip" },
+  { id:1, author:"Margaret", age:72, avatar:"M", location:"Portland, OR", content:"After 6 weeks I noticed I could remember names at my book club again. Slow and steady — don't skip the calm section, it changed my sleep completely.", likes:47, type:"wisdom", replies:[] },
+  { id:2, author:"Robert",   age:68, avatar:"R", location:"Austin, TX",   content:"The Eight Brocades felt awkward at first. By week three I was doing it in my backyard at sunrise. Now my grandkids try to copy me.", likes:83, type:"story", replies:[] },
+  { id:3, author:"Sylvia",   age:65, avatar:"S", location:"Tampa, FL",    content:"I was skeptical about acupressure. Four weeks in and I sleep through the night. The ear points are magic.", likes:61, type:"wisdom", replies:[] },
+  { id:4, author:"James",    age:74, avatar:"J", location:"Seattle, WA",  content:"Tip for newcomers: do the movement section by a chair for balance support. No shame in it — I did it for 2 months.", likes:39, type:"tip", replies:[] },
 ];
 
 const healthMetrics = [
