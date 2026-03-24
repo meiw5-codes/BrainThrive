@@ -1167,7 +1167,7 @@ function BrainThrive({ user, onSignOut, onSessionLocked, isLocked }) {
                     <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
                       <Btn variant="primary" onClick={()=>{
                         if (!wisdomText.trim()) return;
-                        const newPost = { id:Date.now(), author:user?.name||"You", age:"", avatar:(user?.name||"Y")[0].toUpperCase(), location:"", content:wisdomText, likes:0, type:"wisdom", replies:[] };
+                        const newPost = { id:Date.now(), author:user?.name||"You", age:0, avatar:(user?.name||"Y")[0].toUpperCase(), location:"", content:wisdomText, likes:0, type:"wisdom", replies:[] };
                         setCommunityPosts(ps=>[newPost,...ps]);
                         const stats=loadStats(); stats.wisdomPosts=[newPost,...(stats.wisdomPosts||[])]; saveStats(stats);
                         setWisdomPosted(true); setWisdomText("");
