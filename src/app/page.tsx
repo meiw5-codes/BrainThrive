@@ -57,7 +57,7 @@ const sessions = [
   { id:23, title:"Parasympathetic Activation",      pillar:"Calm",  duration:12, level:"Moderate",   completed:false, videoUrl:"" },
   { id:24, title:"Deep Meridian Flow Session",      pillar:"Calm",  duration:25, level:"Energising", completed:false, videoUrl:"" },
   { id:25, title:"HRV Coherence Breathing",         pillar:"Calm",  duration:20, level:"Energising", completed:false, videoUrl:"" },
-  { id:26, title:"Memory Pattern Challenge",        pillar:"Think", duration:15, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:26, title:"Cognitive Fitness", pillar:"Think", duration:20, level:"Gentle", completed:false, videoUrl:"https://vimeo.com/1185791556" },
   { id:27, title:"Name & Face Recall",              pillar:"Think", duration:12, level:"Gentle",     completed:false, videoUrl:"" },
   { id:28, title:"Visual Pattern Matching",         pillar:"Think", duration:10, level:"Gentle",     completed:false, videoUrl:"" },
   { id:29, title:"Word Association Starter",        pillar:"Think", duration:10, level:"Gentle",     completed:false, videoUrl:"" },
