@@ -784,7 +784,7 @@ Based on how the user is feeling, suggest a warm personalized playlist of 2-4 se
                 <Btn variant="white" size="lg" onClick={()=>setTab("sessions")}>Begin today's ritual →</Btn>
               </div>
 
-              {              {/* Today s Ritual */}
+              {/* Today s Ritual */
               <div style={{ marginBottom:26 }}>
                 <div style={{ fontFamily:"'Lora',serif", fontSize:20, fontWeight:600, color:C.ink, marginBottom:16 }}>Today s Ritual</div>
                 <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14 }}>
