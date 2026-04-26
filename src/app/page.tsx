@@ -57,7 +57,7 @@ const sessions = [
   { id:23, title:"Parasympathetic Activation",      pillar:"Calm",  duration:12, level:"Moderate",   completed:false, videoUrl:"" },
   { id:24, title:"Deep Meridian Flow Session",      pillar:"Calm",  duration:25, level:"Energising", completed:false, videoUrl:"" },
   { id:25, title:"HRV Coherence Breathing",         pillar:"Calm",  duration:20, level:"Energising", completed:false, videoUrl:"" },
-  { id:26, title:"Cognitive Fitness", pillar:"Think", duration:20, level:"Gentle", completed:false, videoUrl:"https://vimeo.com/1185791556" },
+  { id:26, title:"Memory Pattern Challenge",        pillar:"Think", duration:15, level:"Gentle",     completed:false, videoUrl:"" },
   { id:27, title:"Name & Face Recall",              pillar:"Think", duration:12, level:"Gentle",     completed:false, videoUrl:"" },
   { id:28, title:"Visual Pattern Matching",         pillar:"Think", duration:10, level:"Gentle",     completed:false, videoUrl:"" },
   { id:29, title:"Word Association Starter",        pillar:"Think", duration:10, level:"Gentle",     completed:false, videoUrl:"" },
@@ -71,10 +71,10 @@ const sessions = [
 ];
 
 const wisdomPosts = [
-  { id:1, author:"Margaret", age:72, avatar:"M", location:"Portland, OR", content:"After 6 weeks I noticed I could remember names at my book club again. Slow and steady — don't skip the calm section, it changed my sleep completely.", likes:47, type:"wisdom", replies:[] },
-  { id:2, author:"Robert",   age:68, avatar:"R", location:"Austin, TX",   content:"The Eight Brocades felt awkward at first. By week three I was doing it in my backyard at sunrise. Now my grandkids try to copy me.", likes:83, type:"story", replies:[] },
-  { id:3, author:"Sylvia",   age:65, avatar:"S", location:"Tampa, FL",    content:"I was skeptical about acupressure. Four weeks in and I sleep through the night. The ear points are magic.", likes:61, type:"wisdom", replies:[] },
-  { id:4, author:"James",    age:74, avatar:"J", location:"Seattle, WA",  content:"Tip for newcomers: do the movement section by a chair for balance support. No shame in it — I did it for 2 months.", likes:39, type:"tip", replies:[] },
+  { id:1, author:"Margaret", age:72, avatar:"M", location:"Portland, OR", content:"After 6 weeks I noticed I could remember names at my book club again. Slow and steady — don't skip the calm section, it changed my sleep completely.", likes:47, type:"wisdom" },
+  { id:2, author:"Robert",   age:68, avatar:"R", location:"Austin, TX",   content:"The Eight Brocades felt awkward at first. By week three I was doing it in my backyard at sunrise. Now my grandkids try to copy me.", likes:83, type:"story" },
+  { id:3, author:"Sylvia",   age:65, avatar:"S", location:"Tampa, FL",    content:"I was skeptical about acupressure. Four weeks in and I sleep through the night. The ear points are magic.", likes:61, type:"wisdom" },
+  { id:4, author:"James",    age:74, avatar:"J", location:"Seattle, WA",  content:"Tip for newcomers: do the movement section by a chair for balance support. No shame in it — I did it for 2 months.", likes:39, type:"tip" },
 ];
 
 const healthMetrics = [
@@ -111,7 +111,7 @@ function Avatar({ letter, size=44, bg=C.sageLight, color=C.sage }) {
   );
 }
 
-function Card({ children, style={}, onClick=undefined }) {
+function Card({ children, style={}, onClick }) {
   const [hov, setHov] = useState(false);
   return (
     <div onClick={onClick} onMouseEnter={()=>onClick&&setHov(true)} onMouseLeave={()=>setHov(false)}
@@ -1167,7 +1167,7 @@ function BrainThrive({ user, onSignOut, onSessionLocked, isLocked }) {
                     <div style={{ display:"flex", gap:8, flexWrap:"wrap" }}>
                       <Btn variant="primary" onClick={()=>{
                         if (!wisdomText.trim()) return;
-                        const newPost = { id:Date.now(), author:user?.name||"You", age:0, avatar:(user?.name||"Y")[0].toUpperCase(), location:"", content:wisdomText, likes:0, type:"wisdom", replies:[] };
+                        const newPost = { id:Date.now(), author:user?.name||"You", age:"", avatar:(user?.name||"Y")[0].toUpperCase(), location:"", content:wisdomText, likes:0, type:"wisdom", replies:[] };
                         setCommunityPosts(ps=>[newPost,...ps]);
                         const stats=loadStats(); stats.wisdomPosts=[newPost,...(stats.wisdomPosts||[])]; saveStats(stats);
                         setWisdomPosted(true); setWisdomText("");
