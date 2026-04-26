@@ -784,22 +784,22 @@ Based on how the user is feeling, suggest a warm personalized playlist of 2-4 se
                 <Btn variant="white" size="lg" onClick={()=>setTab("sessions")}>Begin today's ritual →</Btn>
               </div>
 
-              {/* Today's Ritual */}
+              {              {/* Today s Ritual */}
               <div style={{ marginBottom:26 }}>
-                <div style={{ fontFamily:"'Lora',serif", fontSize:20, fontWeight:600, color:C.ink, marginBottom:16 }}>Today's Ritual</div>
+                <div style={{ fontFamily:"'Lora',serif", fontSize:20, fontWeight:600, color:C.ink, marginBottom:16 }}>Today s Ritual</div>
                 <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14 }}>
-                  {[{p:"Move",t:"Standing & Sitting Baduanjin",d:"20 min",id:3},{p:"Calm",t:"Mental Clarity Acupressure",d:"15 min",id:1},{p:"Think",t:"Cognitive Fitness",d:"20 min",id:20}].map(item=>({...item,done:completedIds.has(item.id)})).map(item=>(
-                    <Card key={item.p} onClick={()=>{setSessionActive(item);setTab("sessions");}} style={{ padding:22 }}>
+                  {sessions.filter(s=>s.free).map(s=>(
+                    <Card key={s.id} onClick={()=>{ setSessionActive(s); setTab("sessions"); }} style={{ padding:22 }}>
                       <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:12 }}>
-                        <PillarBadge pillar={item.p}/>
-                        {item.done && <span style={{ fontSize:18, color:pillarColor[item.p] }}>✓</span>}
+                        <PillarBadge pillar={s.pillar}/>
+                        {completedIds.has(s.id) && <span style={{ fontSize:18, color:pillarColor[s.pillar] }}>✓</span>}
                       </div>
-                      <div style={{ fontFamily:"'Lora',serif", fontSize:17, fontWeight:600, color:C.ink, marginBottom:4, lineHeight:1.3 }}>{item.t}</div>
-                      <div style={{ fontSize:14, color:C.inkLight, marginBottom:14 }}>{item.d}</div>
-                      <div style={{ background:item.done?pillarBg[item.p]:C.bgDeep, height:5, borderRadius:3 }}>
-                        <div style={{ background:item.done?pillarColor[item.p]:"transparent", height:5, borderRadius:3, width:item.done?"100%":"0%" }}/>
+                      <div style={{ fontFamily:"'Lora',serif", fontSize:17, fontWeight:600, color:C.ink, marginBottom:4, lineHeight:1.3 }}>{s.title}</div>
+                      <div style={{ fontSize:14, color:C.inkLight, marginBottom:14 }}>{s.duration} min</div>
+                      <div style={{ background:completedIds.has(s.id)?pillarBg[s.pillar]:C.bgDeep, height:5, borderRadius:3 }}>
+                        <div style={{ background:completedIds.has(s.id)?pillarColor[s.pillar]:"transparent", height:5, borderRadius:3, width:completedIds.has(s.id)?"100%":"0%" }}/>
                       </div>
-                      <div style={{ fontSize:13, color:item.done?pillarColor[item.p]:C.amber, marginTop:10, fontWeight:500 }}>{item.done?"✓ Complete":"→ Start now"}</div>
+                      <div style={{ fontSize:13, color:completedIds.has(s.id)?pillarColor[s.pillar]:C.sage, marginTop:10, fontWeight:500 }}>{completedIds.has(s.id)?"✓ Complete":"▶ Watch now"}</div>
                     </Card>
                   ))}
                 </div>
