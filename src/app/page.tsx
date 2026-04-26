@@ -784,43 +784,20 @@ Based on how the user is feeling, suggest a warm personalized playlist of 2-4 se
                 <Btn variant="white" size="lg" onClick={()=>setTab("sessions")}>Begin today's ritual →</Btn>
               </div>
 
-              {/* Today s Ritual */
-              <div style={{ marginBottom:26 }}>
-                <div style={{ fontFamily:"'Lora',serif", fontSize:20, fontWeight:600, color:C.ink, marginBottom:16 }}>Today s Ritual</div>
-                <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14 }}>
+              {/* Free Trial */}
+              <div style={{marginBottom:24}}>
+                <div style={{fontFamily:"'Lora',serif",fontSize:20,fontWeight:600,color:C.ink,marginBottom:16}}>Try a Free Session</div>
+                <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:14}}>
                   {sessions.filter(s=>s.free).map(s=>(
-                    <Card key={s.id} onClick={()=>{ setSessionActive(s); setTab("sessions"); }} style={{ padding:22 }}>
-                      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:12 }}>
-                        <PillarBadge pillar={s.pillar}/>
-                        {completedIds.has(s.id) && <span style={{ fontSize:18, color:pillarColor[s.pillar] }}>✓</span>}
+                    <div key={s.id} onClick={()=>{setSessionActive(s);setTab("sessions");}}
+                      style={{background:"#fff",borderRadius:20,padding:20,border:"1.5px solid rgba(92,138,110,0.3)",cursor:"pointer"}}>
+                      <div style={{display:"flex",justifyContent:"space-between",marginBottom:10}}>
+                        <span style={{background:pillarBg[s.pillar],color:pillarColor[s.pillar],fontSize:12,fontWeight:600,padding:"3px 10px",borderRadius:20}}>{pillarIcon[s.pillar]} {s.pillar}</span>
+                        <span style={{background:C.goldLight,color:C.gold,fontSize:11,fontWeight:700,padding:"3px 9px",borderRadius:10}}>FREE</span>
                       </div>
-                      <div style={{ fontFamily:"'Lora',serif", fontSize:17, fontWeight:600, color:C.ink, marginBottom:4, lineHeight:1.3 }}>{s.title}</div>
-                      <div style={{ fontSize:14, color:C.inkLight, marginBottom:14 }}>{s.duration} min</div>
-                      <div style={{ background:completedIds.has(s.id)?pillarBg[s.pillar]:C.bgDeep, height:5, borderRadius:3 }}>
-                        <div style={{ background:completedIds.has(s.id)?pillarColor[s.pillar]:"transparent", height:5, borderRadius:3, width:completedIds.has(s.id)?"100%":"0%" }}/>
-                      </div>
-                      <div style={{ fontSize:13, color:completedIds.has(s.id)?pillarColor[s.pillar]:C.sage, marginTop:10, fontWeight:500 }}>{completedIds.has(s.id)?"✓ Complete":"▶ Watch now"}</div>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              {/* Free Trial Banner */}
-              <div style={{ marginBottom:24 }}>
-                <div style={{ fontFamily:"'Lora',serif", fontSize:20, fontWeight:600, color:C.ink, marginBottom:16 }}>Start with a Free Session</div>
-                <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14 }}>
-                  {sessions.filter(s=>s.free).map(s=>(
-                    <div key={s.id} onClick={()=>{ setSessionActive(s); setTab("sessions"); }}
-                      style={{ background:"#fff", borderRadius:20, padding:20, border:"1.5px solid "+C.sage+"40", cursor:"pointer", transition:"all 0.2s", boxShadow:"0 2px 8px rgba(0,0,0,0.04)" }}
-                      onMouseEnter={e=>{ e.currentTarget.style.transform="translateY(-2px)"; e.currentTarget.style.boxShadow="0 8px 24px rgba(0,0,0,0.10)"; }}
-                      onMouseLeave={e=>{ e.currentTarget.style.transform="none"; e.currentTarget.style.boxShadow="0 2px 8px rgba(0,0,0,0.04)"; }}>
-                      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:10 }}>
-                        <span style={{ background:pillarBg[s.pillar], color:pillarColor[s.pillar], fontSize:12, fontWeight:600, padding:"3px 10px", borderRadius:20 }}>{pillarIcon[s.pillar]} {s.pillar}</span>
-                        <span style={{ background:C.goldLight, color:C.gold, fontSize:11, fontWeight:700, padding:"3px 9px", borderRadius:10 }}>FREE</span>
-                      </div>
-                      <div style={{ fontFamily:"'Lora',serif", fontSize:16, fontWeight:600, color:C.ink, marginBottom:4, lineHeight:1.3 }}>{s.title}</div>
-                      <div style={{ fontSize:13, color:C.inkLight, marginBottom:14 }}>{s.duration} min · {s.level}</div>
-                      <div style={{ background:C.sage, color:"#fff", borderRadius:12, padding:"8px 0", textAlign:"center", fontSize:14, fontWeight:600 }}>▶ Watch free</div>
+                      <div style={{fontFamily:"'Lora',serif",fontSize:15,fontWeight:600,color:C.ink,marginBottom:4,lineHeight:1.3}}>{s.title}</div>
+                      <div style={{fontSize:13,color:C.inkLight,marginBottom:12}}>{s.duration} min</div>
+                      <div style={{background:C.sage,color:"#fff",borderRadius:10,padding:"8px 0",textAlign:"center",fontSize:13,fontWeight:600}}>▶ Watch free</div>
                     </div>
                   ))}
                 </div>
