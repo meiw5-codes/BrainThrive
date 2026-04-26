@@ -32,142 +32,43 @@ const pillarIcon  = { Move: "🌿",         Calm: "🌊",         Think: "🧠" 
 
 // ─── Data ─────────────────────────────────────────────────────────
 const sessions = [
-  // ── FREE TRIAL VIDEOS (always unlocked) ──────────────────────
-  {
-    id:1, title:"Mental Clarity Acupressure", pillar:"Calm", duration:15, level:"Gentle", completed:false, free:true,
-    videoUrl:"https://vimeo.com/1178671740",
-    description:"A guided acupressure session focusing on stimulating key pressure points on the head and hands to support mental clarity, relaxation, and a refreshed, focused mind."
-  },
-  {
-    id:2, title:"Acupressure for Sleep — 10 min Reset", pillar:"Calm", duration:10, level:"Gentle", completed:false, free:true,
-    videoUrl:"https://vimeo.com/1178638230",
-    description:"A gentle wind-down session featuring calming breathing, auricular massages, and light movements designed to help older adults relax before bed, reduce nighttime discomfort, and prepare the body for restful sleep."
-  },
-  {
-    id:3, title:"Standing & Sitting Baduanjin for Strength, Balance & Attention", pillar:"Move", duration:20, level:"Gentle", completed:false, free:true,
-    videoUrl:"https://vimeo.com/1185695370",
-    description:"A complete Baduanjin Eight Brocades practice combining standing and seated variations, designed to build strength, improve balance, and sharpen attention for older adults at any mobility level."
-  },
-  // ── MOVE ──────────────────────────────────────────────────────
-  {
-    id:4,  title:"Morning Baduanjin Flow",        pillar:"Move",  duration:15, level:"Gentle",     completed:false, free:false,
-    videoUrl:"",
-    description:"Start your morning with a gentle full-body Baduanjin sequence. Eight flowing movements that wake up your joints, improve circulation, and set a calm, focused tone for the day."
-  },
-  {
-    id:5,  title:"Chair-Assisted Baduanjin",      pillar:"Move",  duration:15, level:"Gentle",     completed:false, free:false,
-    videoUrl:"",
-    description:"A fully chair-supported version of the Eight Brocades sequence. Perfect for those with balance concerns or limited mobility — all the benefits with complete safety and confidence."
-  },
-  {
-    id:6,  title:"PMR Evening Wind-Down",         pillar:"Move",  duration:15, level:"Gentle",     completed:false, free:false,
-    videoUrl:"",
-    description:"Progressive Muscle Relaxation guides you through systematically tensing and releasing each muscle group, melting away the tension of the day and preparing your body for deep, restorative sleep."
-  },
-  {
-    id:7,  title:"Gentle Joint Warm-Up",          pillar:"Move",  duration:10, level:"Gentle",     completed:false, free:false,
-    videoUrl:"",
-    description:"A slow, mindful warm-up rotating through every major joint — ankles, knees, hips, spine, shoulders, wrists. Reduces stiffness and lubricates joints before any activity."
-  },
-  {
-    id:8,  title:"Eight Brocades — Full Sequence",pillar:"Move",  duration:20, level:"Moderate",   completed:false, free:false,
-    videoUrl:"",
-    description:"The complete traditional Eight Brocades Baduanjin practice at a moderate pace. Builds on the introduction with deeper stretches, fuller movements, and sustained balance holds."
-  },
-  {
-    id:9,  title:"Balance & Steady Stance",       pillar:"Move",  duration:18, level:"Moderate",   completed:false, free:false,
-    videoUrl:"",
-    description:"Targeted balance and proprioception training using Baduanjin stances and weight-shifting exercises. Clinically shown to reduce fall risk in older adults."
-  },
-  {
-    id:10, title:"Spinal Mobility & Posture",     pillar:"Move",  duration:15, level:"Moderate",   completed:false, free:false,
-    videoUrl:"",
-    description:"A focused sequence for spinal health — gentle rotations, lateral stretches, and forward folds that decompress the spine, improve posture, and relieve chronic back tension."
-  },
-  {
-    id:11, title:"Baduanjin Master Flow",         pillar:"Move",  duration:30, level:"Energising", completed:false, free:false,
-    videoUrl:"",
-    description:"The full 30-minute master practice integrating all Eight Brocades with breath synchronisation, deep stances, and flowing transitions. For those who have built a consistent practice."
-  },
-  // ── CALM ──────────────────────────────────────────────────────
-  {
-    id:12, title:"Mental Clarity Acupressure",    pillar:"Calm",  duration:15, level:"Gentle",     completed:false, free:false,
-    videoUrl:"https://vimeo.com/1178671740",
-    description:"A guided acupressure session focusing on stimulating key pressure points on the head and hands to support mental clarity, relaxation, and a refreshed, focused mind."
-  },
-  {
-    id:13, title:"Acupressure for Sleep — Full",  pillar:"Calm",  duration:30, level:"Gentle",     completed:false, free:false,
-    videoUrl:"",
-    description:"The extended sleep preparation practice. Combines auricular (ear) acupressure, hand meridian points, and gentle breath work in a complete 30-minute pre-sleep ritual."
-  },
-  {
-    id:14, title:"Hand Meridian Sequence",        pillar:"Calm",  duration:8,  level:"Gentle",     completed:false, free:false,
-    videoUrl:"",
-    description:"Activate the six meridian channels running through your hands with this simple self-massage sequence. Relieves tension, improves circulation in the hands, and calms the nervous system."
-  },
-  {
-    id:15, title:"4-7-8 Breathing Reset",         pillar:"Calm",  duration:8,  level:"Gentle",     completed:false, free:false,
-    videoUrl:"",
-    description:"The 4-7-8 breathing technique is one of the most evidence-backed methods for rapidly reducing anxiety and activating the body's relaxation response. Use it anytime, anywhere."
-  },
-  {
-    id:16, title:"Ear Acupressure for Sleep",     pillar:"Calm",  duration:8,  level:"Gentle",     completed:false, free:false,
-    videoUrl:"",
-    description:"Gentle stimulation of the auricular (ear) pressure points associated with calm, sleep, and stress relief. A 5,000-year-old practice now supported by modern research."
-  },
-  {
-    id:17, title:"Cortisol Reset Protocol",       pillar:"Calm",  duration:15, level:"Moderate",   completed:false, free:false,
-    videoUrl:"",
-    description:"A structured sequence of breath work, acupressure, and gentle movement specifically designed to lower cortisol (the stress hormone) and restore a sense of calm and safety."
-  },
-  {
-    id:18, title:"Full Body Acupressure Scan",    pillar:"Calm",  duration:18, level:"Moderate",   completed:false, free:false,
-    videoUrl:"",
-    description:"A head-to-toe guided acupressure practice moving through all major meridian points. Ideal for deep relaxation, chronic pain relief, and overall energy restoration."
-  },
-  {
-    id:19, title:"HRV Coherence Breathing",       pillar:"Calm",  duration:20, level:"Energising", completed:false, free:false,
-    videoUrl:"",
-    description:"Heart Rate Variability coherence breathing at 5-6 breaths per minute synchronises your heart, lungs, and nervous system. Measurably reduces stress and improves emotional resilience."
-  },
-  // ── THINK ─────────────────────────────────────────────────────
-  {
-    id:20, title:"Cognitive Fitness",             pillar:"Think", duration:20, level:"Gentle",     completed:false, free:false,
-    videoUrl:"https://vimeo.com/1185791556",
-    description:"An engaging brain training session combining memory exercises, attention challenges, and cognitive games. Designed specifically for older adults to maintain and strengthen mental sharpness."
-  },
-  {
-    id:21, title:"Memory & Name Recall",          pillar:"Think", duration:12, level:"Gentle",     completed:false, free:false,
-    videoUrl:"",
-    description:"Targeted exercises for the kind of memory that matters most in daily life — remembering names, faces, and recent events. Uses proven encoding strategies adapted for older adults."
-  },
-  {
-    id:22, title:"Focus & Attention Builder",     pillar:"Think", duration:12, level:"Gentle",     completed:false, free:false,
-    videoUrl:"",
-    description:"Gentle sustained attention exercises that strengthen your ability to concentrate, filter distractions, and stay present. Particularly helpful for those noticing concentration changes."
-  },
-  {
-    id:23, title:"Word Association & Language",   pillar:"Think", duration:10, level:"Gentle",     completed:false, free:false,
-    videoUrl:"",
-    description:"Keep language fluency sharp with word association, category naming, and verbal reasoning exercises. Fun, engaging, and clinically linked to cognitive reserve."
-  },
-  {
-    id:24, title:"Working Memory Sprint",         pillar:"Think", duration:18, level:"Moderate",   completed:false, free:false,
-    videoUrl:"",
-    description:"Working memory — holding and manipulating information in your mind — is one of the first cognitive functions to decline with age. These targeted exercises build it back up."
-  },
-  {
-    id:25, title:"Dual-Task Coordination",        pillar:"Think", duration:20, level:"Moderate",   completed:false, free:false,
-    videoUrl:"",
-    description:"Combines gentle physical movement with cognitive tasks simultaneously — a powerful method for strengthening the brain-body connection and reducing fall risk through better attention."
-  },
-  {
-    id:26, title:"Processing Speed Challenge",    pillar:"Think", duration:20, level:"Energising", completed:false, free:false,
-    videoUrl:"",
-    description:"Speed of processing is a key marker of cognitive health. These progressively faster exercises challenge your brain to respond quickly and accurately, building mental agility."
-  },
+  { id:1,  title:"Morning Baduanjin Flow",         pillar:"Move",  duration:15, level:"Gentle",     completed:false, videoUrl:"https://vimeo.com/1175566185" },
+  { id:2,  title:"Eight Brocades — Introduction",  pillar:"Move",  duration:12, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:3,  title:"Standing Posture & Root",         pillar:"Move",  duration:10, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:4,  title:"Chair-Assisted Baduanjin",        pillar:"Move",  duration:15, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:5,  title:"PMR Evening Wind-Down",           pillar:"Move",  duration:15, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:6,  title:"Gentle Joint Warm-Up",            pillar:"Move",  duration:10, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:7,  title:"Eight Brocades — Full Sequence",  pillar:"Move",  duration:20, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:8,  title:"Balance & Steady Stance",         pillar:"Move",  duration:18, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:9,  title:"Baduanjin Flow + Breathwork",     pillar:"Move",  duration:22, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:10, title:"PMR Deep Muscle Release",         pillar:"Move",  duration:20, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:11, title:"Spinal Mobility Sequence",        pillar:"Move",  duration:15, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:12, title:"Baduanjin Master Flow",           pillar:"Move",  duration:30, level:"Energising", completed:false, videoUrl:"" },
+  { id:13, title:"Dynamic Balance Challenge",       pillar:"Move",  duration:25, level:"Energising", completed:false, videoUrl:"" },
+  { id:14, title:"Auricular & Body Relaxation for Sleep", pillar:"Calm", duration:30, level:"Gentle", completed:false, videoUrl:"https://vimeo.com/1175246296" },
+  { id:15, title:"Auricular & Body Relaxation — 5 min",   pillar:"Calm", duration:5,  level:"Gentle", completed:false, videoUrl:"https://vimeo.com/1175244443" },
+  { id:16, title:"Ear Acupressure for Sleep",       pillar:"Calm",  duration:8,  level:"Gentle",     completed:false, videoUrl:"" },
+  { id:17, title:"4-7-8 Breathing Reset",           pillar:"Calm",  duration:8,  level:"Gentle",     completed:false, videoUrl:"" },
+  { id:18, title:"Foot Reflexology Basics",         pillar:"Calm",  duration:10, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:19, title:"Morning Nervous System Wake-Up",  pillar:"Calm",  duration:8,  level:"Gentle",     completed:false, videoUrl:"" },
+  { id:20, title:"Breath & Pressure Points",        pillar:"Calm",  duration:12, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:21, title:"Full Acupressure Body Scan",      pillar:"Calm",  duration:18, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:22, title:"Cortisol Reset Protocol",         pillar:"Calm",  duration:15, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:23, title:"Parasympathetic Activation",      pillar:"Calm",  duration:12, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:24, title:"Deep Meridian Flow Session",      pillar:"Calm",  duration:25, level:"Energising", completed:false, videoUrl:"" },
+  { id:25, title:"HRV Coherence Breathing",         pillar:"Calm",  duration:20, level:"Energising", completed:false, videoUrl:"" },
+  { id:26, title:"Memory Pattern Challenge",        pillar:"Think", duration:15, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:27, title:"Name & Face Recall",              pillar:"Think", duration:12, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:28, title:"Visual Pattern Matching",         pillar:"Think", duration:10, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:29, title:"Word Association Starter",        pillar:"Think", duration:10, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:30, title:"Focus & Attention Builder",       pillar:"Think", duration:12, level:"Gentle",     completed:false, videoUrl:"" },
+  { id:31, title:"Working Memory Sprint",           pillar:"Think", duration:18, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:32, title:"Dual-Task Coordination",          pillar:"Think", duration:20, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:33, title:"Number Sequence Challenge",       pillar:"Think", duration:15, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:34, title:"Cognitive Flexibility Drill",     pillar:"Think", duration:18, level:"Moderate",   completed:false, videoUrl:"" },
+  { id:35, title:"Pattern Recognition Boost",       pillar:"Think", duration:20, level:"Energising", completed:false, videoUrl:"" },
+  { id:36, title:"Processing Speed Master Class",   pillar:"Think", duration:25, level:"Energising", completed:false, videoUrl:"" },
 ];
-
 
 const wisdomPosts: any[] = [
   { id:1, author:"Margaret", age:72, avatar:"M", location:"Portland, OR", content:"After 6 weeks I noticed I could remember names at my book club again. Slow and steady — don't skip the calm section, it changed my sleep completely.", likes:47, type:"wisdom" },
@@ -469,8 +370,8 @@ function PaywallScreen({ onSubscribe, onBack, sessionTitle, user }) {
 }
 
 // ─── Free session gate ────────────────────────────────────────────
-// Sessions marked free:true are always unlocked
-const FREE_SESSION_IDS = new Set(sessions.filter(s=>s.free).map(s=>s.id));
+// Session IDs that are free for all users (first video per pillar)
+const FREE_SESSION_IDS = new Set([1, 14, 26]);
 
 function isSessionLocked(sessionId, user) {
   if (!user) return true;
@@ -644,15 +545,10 @@ function BrainThrive({ user, onSignOut, onSessionLocked, isLocked }) {
     setPlaylistLoading(true); setPlaylistError(""); setPlaylist(null);
     try {
       const res = await fetch("https://api.anthropic.com/v1/messages",{
-        method:"POST", headers:{"Content-Type":"application/json","x-api-key":process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY||"","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+        method:"POST", headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
           model:"claude-sonnet-4-20250514", max_tokens:1000,
-          system:`You are Sage, BrainThrive's warm AI wellness companion for seniors. The platform has 3 pillars: Move, Calm, Think. Here are the available sessions with descriptions:
-FREE SESSIONS: Mental Clarity Acupressure (Calm,15min,Gentle) — acupressure on head and hands for mental clarity and focus. Acupressure for Sleep 10min Reset (Calm,10min,Gentle) — breathing, auricular massage and light movement to prepare body for sleep. Standing and Sitting Baduanjin for Strength Balance and Attention (Move,20min,Gentle) — Baduanjin Eight Brocades combining standing and seated variations for strength, balance and attention.
-PRO SESSIONS — MOVE: Morning Baduanjin Flow (Move,15min,Gentle), Chair-Assisted Baduanjin (Move,15min,Gentle), PMR Evening Wind-Down (Move,15min,Gentle), Eight Brocades Full Sequence (Move,20min,Moderate), Balance and Steady Stance (Move,18min,Moderate), Spinal Mobility and Posture (Move,15min,Moderate), Baduanjin Master Flow (Move,30min,Energising).
-PRO SESSIONS — CALM: Hand Meridian Sequence (Calm,8min,Gentle), 4-7-8 Breathing Reset (Calm,8min,Gentle), Ear Acupressure for Sleep (Calm,8min,Gentle), Cortisol Reset Protocol (Calm,15min,Moderate), Full Body Acupressure Scan (Calm,18min,Moderate), HRV Coherence Breathing (Calm,20min,Energising).
-PRO SESSIONS — THINK: Cognitive Fitness (Think,20min,Gentle) — brain training for memory and attention. Memory and Name Recall (Think,12min,Gentle), Focus and Attention Builder (Think,12min,Gentle), Word Association and Language (Think,10min,Gentle), Working Memory Sprint (Think,18min,Moderate), Dual-Task Coordination (Think,20min,Moderate), Processing Speed Challenge (Think,20min,Energising).
-Based on how the user is feeling, suggest a warm personalized playlist of 2-4 sessions that would genuinely help them. Respond ONLY with valid JSON, no markdown: {"playlistName":"...","rationale":"warm 1-2 sentence reason that references their specific feeling","totalMinutes":number,"sessions":[{"title":"...","pillar":"Move|Calm|Think","duration":number,"reason":"brief warm specific reason"}]}`,
+          system:`You are Sage, BrainThrive's AI wellness companion for seniors. Pillars: Move (Baduanjin, PMR), Calm (acupressure, breathing), Think (brain games). Sessions available: Morning Baduanjin Flow (Move 15min Gentle), Acupressure Calm Reset (Calm 10min Gentle), Memory Pattern Challenge (Think 15min Gentle), Eight Brocades Full Sequence (Move 20min Moderate), Breath & Pressure Points (Calm 12min Moderate), Working Memory Sprint (Think 18min Moderate), PMR Evening Wind-Down (Move 15min Gentle), Hand Meridian Sequence (Calm 8min Gentle), Pattern Recognition Boost (Think 20min Energising). Create a warm personalized playlist of 2-4 sessions. Respond ONLY with valid JSON: {"playlistName":"...","rationale":"warm 1-2 sentence reason","totalMinutes":number,"sessions":[{"title":"...","pillar":"Move|Calm|Think","duration":number,"reason":"brief warm phrase"}]}`,
           messages:[{role:"user",content:aiPrompt}],
         }),
       });
@@ -679,7 +575,7 @@ Based on how the user is feeling, suggest a warm personalized playlist of 2-4 se
     const remaining = ["Move","Calm","Think"].filter(p=>p!==completedPillar);
     try {
       const res = await fetch("https://api.anthropic.com/v1/messages",{
-        method:"POST", headers:{"Content-Type":"application/json","x-api-key":process.env.NEXT_PUBLIC_ANTHROPIC_API_KEY||"","anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+        method:"POST", headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
           model:"claude-sonnet-4-20250514", max_tokens:600,
           system:`You are Sage, BrainThrive's warm AI companion for seniors. The user just finished a session. Suggest exactly 3 next sessions from this library. Prioritise completing their daily ritual (Move, Calm, Think) if pillars are missing today. Be warm and encouraging. Session library: Morning Baduanjin Flow (Move,15,Gentle), Eight Brocades Introduction (Move,12,Gentle), Chair-Assisted Baduanjin (Move,15,Gentle), PMR Evening Wind-Down (Move,15,Gentle), Eight Brocades Full Sequence (Move,20,Moderate), Balance & Steady Stance (Move,18,Moderate), Acupressure Calm Reset (Calm,10,Gentle), Hand Meridian Sequence (Calm,8,Gentle), Ear Acupressure for Sleep (Calm,8,Gentle), 4-7-8 Breathing Reset (Calm,8,Gentle), Breath & Pressure Points (Calm,12,Moderate), Memory Pattern Challenge (Think,15,Gentle), Name & Face Recall (Think,12,Gentle), Word Association Starter (Think,10,Gentle), Working Memory Sprint (Think,18,Moderate), Pattern Recognition Boost (Think,20,Energising). Respond ONLY with valid JSON no markdown: {"encouragement":"one warm sentence praising what they just did","suggestions":[{"title":"...","pillar":"Move|Calm|Think","duration":number,"level":"...","reason":"short warm reason 6 words max"}]}`,
@@ -788,7 +684,7 @@ Based on how the user is feeling, suggest a warm personalized playlist of 2-4 se
               <div style={{ marginBottom:26 }}>
                 <div style={{ fontFamily:"'Lora',serif", fontSize:20, fontWeight:600, color:C.ink, marginBottom:16 }}>Today's Ritual</div>
                 <div style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:14 }}>
-                  {[{p:"Move",t:"Standing & Sitting Baduanjin",d:"20 min",id:3},{p:"Calm",t:"Mental Clarity Acupressure",d:"15 min",id:1},{p:"Think",t:"Cognitive Fitness",d:"20 min",id:20}].map(item=>({...item,done:completedIds.has(item.id)})).map(item=>(
+                  {[{p:"Move",t:"Baduanjin Flow",d:"15 min",id:1},{p:"Calm",t:"Auricular Relaxation",d:"30 min",id:14},{p:"Think",t:"Memory Challenge",d:"15 min",id:26}].map(item=>({...item,done:completedIds.has(item.id)})).map(item=>(
                     <Card key={item.p} onClick={()=>{setSessionActive(item);setTab("sessions");}} style={{ padding:22 }}>
                       <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:12 }}>
                         <PillarBadge pillar={item.p}/>
@@ -999,51 +895,17 @@ Based on how the user is feeling, suggest a warm personalized playlist of 2-4 se
                     )}
 
                     <div style={{ fontSize:15, color:C.inkMid, lineHeight:1.7, borderTop:`1px solid ${C.border}`, paddingTop:18 }}>
-                      <strong>About this session:</strong> {sessionActive.description || "A BrainThrive session combining movement, breath, and mindful attention to support your brain and body health."}
+                      <strong>About this session:</strong> Baduanjin Eight Brocades is an 800-year-old movement sequence clinically validated to improve balance, circulation, and neuroplasticity.
                     </div>
                   </Card>
                 </div>
               ) : (
                 <div>
-                  <div style={{ marginBottom:20 }}>
+                  <div style={{ marginBottom:24 }}>
                     <h2 style={{ fontFamily:"'Lora',serif", fontSize:28, margin:"0 0 6px", fontWeight:600 }}>Session Library</h2>
                     <p style={{ color:C.inkLight, margin:0, fontSize:16 }}>{sessions.length} sessions · {sessions.filter(s=>s.videoUrl).length} videos live</p>
                   </div>
-
-                  {/* ── FREE TRIAL SECTION ── */}
-                  <div style={{ background:`linear-gradient(135deg,${C.goldLight},#FFF8EE)`, borderRadius:20, padding:22, marginBottom:28, border:`1px solid ${C.gold}40` }}>
-                    <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:16 }}>
-                      <span style={{ fontSize:22 }}>🎁</span>
-                      <div>
-                        <div style={{ fontFamily:"'Lora',serif", fontSize:18, fontWeight:600, color:C.ink }}>Free Trial — Start Here</div>
-                        <div style={{ fontSize:13, color:C.inkMid }}>3 full sessions included with your free account. No credit card needed.</div>
-                      </div>
-                    </div>
-                    <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-                      {sessions.filter(s=>s.free).map(s=>(
-                        <div key={s.id} onClick={()=>setSessionActive(s)}
-                          style={{ background:"#fff", borderRadius:16, padding:"16px 18px", display:"flex", alignItems:"flex-start", gap:14, cursor:"pointer", border:`1.5px solid ${C.gold}30`, transition:"box-shadow 0.2s" }}
-                          onMouseEnter={e=>e.currentTarget.style.boxShadow="0 4px 16px rgba(0,0,0,0.08)"}
-                          onMouseLeave={e=>e.currentTarget.style.boxShadow="none"}>
-                          <div style={{ width:50, height:50, borderRadius:14, background:pillarBg[s.pillar], display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, flexShrink:0 }}>
-                            {pillarIcon[s.pillar]}
-                          </div>
-                          <div style={{ flex:1 }}>
-                            <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:4 }}>
-                              <div style={{ fontFamily:"'Lora',serif", fontSize:16, fontWeight:600, color:C.ink }}>{s.title}</div>
-                              <span style={{ background:C.goldLight, color:C.gold, fontSize:11, fontWeight:700, padding:"2px 8px", borderRadius:10, flexShrink:0 }}>FREE</span>
-                            </div>
-                            <div style={{ fontSize:13, color:C.inkLight, marginBottom:6 }}>{s.pillar} · {s.duration} min · {s.level}</div>
-                            <div style={{ fontSize:13, color:C.inkMid, lineHeight:1.5 }}>{s.description}</div>
-                          </div>
-                          <div style={{ color:C.gold, fontSize:22, flexShrink:0 }}>›</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* ── PILLAR FILTERS ── */}
-                  <div style={{ display:"flex", gap:8, marginBottom:20, flexWrap:"wrap" }}>
+                  <div style={{ display:"flex", gap:8, marginBottom:24, flexWrap:"wrap" }}>
                     {["All","Move","Calm","Think"].map(p=>(
                       <button key={p} onClick={()=>setPillarFilter(p)}
                         style={{ padding:"10px 20px", borderRadius:24, border:`1.5px solid ${pillarFilter===p?(pillarColor[p]||C.sage):C.borderMid}`, background:pillarFilter===p?(pillarBg[p]||C.sageLight):"#fff", color:pillarFilter===p?(pillarColor[p]||C.sage):C.inkMid, cursor:"pointer", fontSize:15, fontWeight:pillarFilter===p?600:400, fontFamily:"'Inter',sans-serif", transition:"all 0.15s" }}>
@@ -1051,32 +913,27 @@ Based on how the user is feeling, suggest a warm personalized playlist of 2-4 se
                       </button>
                     ))}
                   </div>
-
-                  {/* ── ALL SESSIONS (non-free) ── */}
                   <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
-                    {sessions.filter(s=>!s.free&&(pillarFilter==="All"||s.pillar===pillarFilter)).map(s=>(
-                      <Card key={s.id} onClick={()=>onSessionLocked(s, setSessionActive)} style={{ padding:"18px 22px", opacity:isLocked(s)?0.85:1 }}>
-                        <div style={{ display:"flex", alignItems:"flex-start", gap:16 }}>
+                    {sessions.filter(s=>pillarFilter==="All"||s.pillar===pillarFilter).map(s=>(
+                      <Card key={s.id} onClick={()=>onSessionLocked(s, setSessionActive)} style={{ padding:"18px 22px", display:"flex", alignItems:"center", justifyContent:"space-between", opacity: isLocked(s) ? 0.85 : 1 }}>
+                        <div style={{ display:"flex", alignItems:"center", gap:16 }}>
                           <div style={{ width:52, height:52, borderRadius:16, background:pillarBg[s.pillar], display:"flex", alignItems:"center", justifyContent:"center", fontSize:24, flexShrink:0, position:"relative" }}>
                             {pillarIcon[s.pillar]}
                             {s.videoUrl && !isLocked(s) && <div style={{ position:"absolute", bottom:-2, right:-2, width:14, height:14, borderRadius:"50%", background:C.sage, border:"2px solid #fff" }}/>}
                             {isLocked(s) && <div style={{ position:"absolute", bottom:-2, right:-2, width:18, height:18, borderRadius:"50%", background:C.amber, border:"2px solid #fff", display:"flex", alignItems:"center", justifyContent:"center", fontSize:9 }}>🔒</div>}
                           </div>
-                          <div style={{ flex:1 }}>
-                            <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:4 }}>
-                              <div style={{ fontFamily:"'Lora',serif", fontSize:16, fontWeight:600, color:C.ink }}>{s.title}</div>
-                              <div style={{ display:"flex", alignItems:"center", gap:8, flexShrink:0, marginLeft:10 }}>
-                                {completedIds.has(s.id) && <span style={{ fontSize:12, color:C.sage, background:C.sageLight, padding:"3px 9px", borderRadius:10, fontWeight:600 }}>✓ Done</span>}
-                                {!s.videoUrl && !isLocked(s) && <span style={{ fontSize:11, color:C.amber, background:C.amberLight, padding:"3px 8px", borderRadius:10 }}>Soon</span>}
-                                {isLocked(s) ? <span style={{ fontSize:12, color:C.amber, background:C.amberLight, padding:"4px 10px", borderRadius:12, fontWeight:600 }}>PRO</span> : <span style={{ color:C.inkLight, fontSize:20 }}>›</span>}
-                              </div>
-                            </div>
-                            <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:s.description?6:0 }}>
+                          <div>
+                            <div style={{ fontFamily:"'Lora',serif", fontSize:17, fontWeight:600, color:C.ink, marginBottom:5 }}>{s.title}</div>
+                            <div style={{ display:"flex", alignItems:"center", gap:8 }}>
                               <PillarBadge pillar={s.pillar} size={12}/>
                               <span style={{ fontSize:13, color:C.inkLight }}>{s.duration} min · {s.level}</span>
                             </div>
-                            {s.description && <div style={{ fontSize:13, color:C.inkMid, lineHeight:1.5 }}>{s.description}</div>}
                           </div>
+                        </div>
+                        <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+                          {s.completed && <span style={{ fontSize:12, color:C.sage, background:C.sageLight, padding:"4px 10px", borderRadius:12, fontWeight:600 }}>✓ Done</span>}
+                          {!s.videoUrl && !isLocked(s) && <span style={{ fontSize:11, color:C.amber, background:C.amberLight, padding:"3px 8px", borderRadius:10 }}>Soon</span>}
+                          {isLocked(s) ? <span style={{ fontSize:12, color:C.amber, background:C.amberLight, padding:"4px 10px", borderRadius:12, fontWeight:600 }}>PRO</span> : <span style={{ color:C.inkLight, fontSize:22 }}>›</span>}
                         </div>
                       </Card>
                     ))}
